@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="http://g.tbcdn.cn/mtb/lib-flexible/0.3.4/??flexible_css.js,flexible.js"></script>
+    <title>Document</title>
+    <link rel="stylesheet" href="../src/css/common.css">
+    <style>
+        html, body { height: 100%; }
+        li { height: 100px; background-color: #068be9; }
+    </style>
+</head>
+<body>
+<div id="wrapper" class="iwrapper content">
+    <div class="scroller">
+        <ul>
+            <li></li>
+        </ul>
+    </div>
+</div>
+</body>
+<script src="../src/js/common.js"></script>
+<script src="../src/js/iscroll-probe.js"></script>
+<script>
+    (function () {
+        var scroll = new IScroll("#wrapper", {
+            refresh: true,
+            probeType: 2,
+            animateSpeed: 55,
+            animateBeginOffset: 70,
+            borderColor: '#0394fb',
+            borderBGColor: '#fff',
+            BGColor: '#e1e1e1'
+        });
+
+        scroll.on('pullDownRefresh', function () {
+            setTimeout(function () {
+                scroll.pullDownOver();
+            }, 1000)
+        })
+        scroll.on('pullUpRefresh', function () {
+            setTimeout(function () {
+                scroll.pullUpOver(true);
+            }, 0);
+        })
+    })();
+</script>
+</html>

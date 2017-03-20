@@ -1,0 +1,57 @@
+@import "reset.css";
+/*3d加速*/
+.three-d { -webkit-transform: translateZ(0); -moz-transform: translateZ(0); -ms-transform: translateZ(0); -o-transform: translateZ(0); transform: translateZ(0); }
+/*input样式*/
+::-webkit-input-placeholder { color: #999; }
+input:disabled, input[disabled] { -webkit-text-fill-color: #808080; opacity: 1; }
+[v-cloak], [ng-cloak] { display: none; }
+/*常用样式*/
+.ft { float: left; }
+.fr { float: right; }
+.cf:after { content: " "; display: block; height: 0; clear: both; visibility: hidden; }
+.ellipsis { overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+.none { display: none; }
+.border-box { box-sizing: border-box; }
+/*iscroll上拉下拉提示框样式*/
+.iwrapper { position: absolute; top: 0; left: 0; right: 0; bottom: 0; overflow: hidden; }
+.scroller { position: relative }
+.pull-down, .pull-up { position: absolute; width: 280px; height: 100px; margin-left: -140px; left: 50% }
+.pull-down { top: -100px }
+.pull-up { bottom: -100px }
+.pull-down .tips, .pull-up .tips { text-align: center; font-size: 24px; color: #999; width: 200px; margin-left: 50px; height: 60px; line-height: 60px; margin-top: -30px; top: 50%; position: absolute }
+.scroller .wrap { width: 40px; height: 40px; top: 50%; margin-top: -20px; position: absolute; }
+.scroller .wrap canvas { height: 40px; width: 40px; position: absolute; left: 0; right: 0; }
+@keyframes circle {
+    from { -webkit-transform: rotate(0deg); -moz-transform: rotate(0deg); -ms-transform: rotate(0deg); -o-transform: rotate(0deg); transform: rotate(0deg); }
+    to { -webkit-transform: rotate(360deg); -moz-transform: rotate(360deg); -ms-transform: rotate(360deg); -o-transform: rotate(360deg); transform: rotate(360deg); rotate(360 deg); }
+}
+.circle-ani { -webkit-animation: circle 1s linear infinite; -o-animation: circle 1s linear infinite; animation: circle 1s linear infinite; }
+/*alert toast confirm loading提示框样式*/
+.filter { filter: blur(3px); -webkit-filter: blur(3px); }
+@keyframes scale-big-ani {
+    form { -webkit-transform: scale(0, 0); -moz-transform: scale(0, 0); -ms-transform: scale(0, 0); -o-transform: scale(0, 0); transform: scale(0, 0); }
+    to { -webkit-transform: scale(1, 1); -moz-transform: scale(1, 1); -ms-transform: scale(1, 1); -o-transform: scale(1, 1); transform: scale(1, 1); }
+}
+.toast, .loading, .alert, .confirm { position: fixed; left: 0; top: 0; right: 0; bottom: 0; display: table; height: 100%; width: 100%; display: none; }
+.toast-content, .loading-content, .alert-content, .confirm-content { -webkit-transform: scale(0, 0); -moz-transform: scale(0, 0); -ms-transform: scale(0, 0); -o-transform: scale(0, 0); transform: scale(0, 0); -webkit-animation: scale-big-ani .3s ease-in-out forwards; -o-animation: scale-big-ani .3s ease-in-out forwards; animation: scale-big-ani .3s ease-in-out forwards; overflow: hidden; }
+.toast-content, .loading-content { background-color: rgba(0, 0, 0, .4); }
+.alert-content, .confirm-content { background-color: #fff; }
+.alert-panel, .toast-panel, .loading-panel, .confirm-panel { display: table-cell; vertical-align: middle; }
+.toast-content, .loading-content, .alert-content, .confirm-content { font-size: 28px; border-radius: 20px; margin: 0 auto; }
+.alert, .confirm { z-index: 1000; }
+.toast { z-index: 999; }
+.loading { z-index: 500; }
+.alert-content, .confirm-content { width: 300px; min-height: 170px; padding-top: 10px; }
+.toast-content { max-width: 60%; padding: 30px; color: #fff; }
+.loading-content { width: 300px; color: #fff; padding: 0 30px 30px; }
+.alert-content .header, .confirm-content .header { font-size: 16px; }
+.alert-content .footer, .confirm-content .footer { font-size: 32px; color: #068be9; border-top: 1px solid #ddd; }
+.alert-content .header, .confirm-content .header, .alert-content .footer, .confirm-content .footer { height: 80px; text-align: center; line-height: 80px; }
+.alert-content .body, .confirm-content .body { padding: 15px 30px 15px; min-height: 80px; }
+.confirm-content .cell-l { width: 50%; float: left; border-right: 1px solid #ddd; box-sizing: border-box }
+.confirm-content .cell-r { width: 50%; float: right; }
+.loading-content .upper { margin-top: 34px; margin-bottom: 20px; }
+.loading-content .loading-pic { background: url("../img/dots-loading.png"); width: 48px; height: 48px; margin: 0 auto; }
+.loading-content lower { height: 80px; margin-bottom: 34px; }
+/*统一遮罩*/
+.mask { position: fixed; left: 0; top: 0; right: 0; bottom: 0; background-color: rgba(0, 0, 0, .4) }

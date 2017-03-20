@@ -1,0 +1,587 @@
+(function(window,document,xy){
+    var config = {
+        DOMAIN : 'https://ccapp.cib.com.cn/o2o-merchant-api',
+        SUCCESS_CODE : '000000',
+        TIME_OUT : 10000,
+    };
+    /**
+     * 返回配置常量
+     * @param key {number/string}
+     * @returns {*}
+     */
+    xy.getConfig = function(key){
+        return config[key];
+    }
+    /**
+     * 常用js工具
+     * @type {{extend: extend, param: param, parseSearchStr: parseSearchStr, isEmptyObject: isEmptyObject, localSet: localSet, localGet: localGet, localStorageSet: localStorageSet, sessionStorageSet: sessionStorageSet}}
+     */
+    xy.utils = {
+        extend : function(dfts,opts){
+            for(i in opts){
+                dfts[i] = opts[i];
+            }
+            return dfts;
+        },
+        param : function(opts){
+            var str= '', j;
+            if(!opts) return '';
+            for(j in opts){
+                str += j + '=' +opts[j] + '&';
+            }
+            return str.substring(0,str.length-1);
+        },
+        parseSearchStr : function(searchStr){
+            var arr,result = {},temp;
+            if(searchStr){
+                arr = decodeURIComponent(searchStr).split('&');
+            }else{
+                arr = decodeURIComponent(window.location.search.substr(1)).split('&');
+            }
+            arr.forEach(function(item){
+                if(!item) return;
+                temp = item.split('=');
+                result[temp[0]]=temp[1];
+            });
+            return result;
+        },
+        isEmptyObject : function(c){
+            for(i in c){
+                return false;
+            }
+            return true;
+        },
+        html : function(s){
+            var o = document.createElement('div');
+            o.innerHTML = s;
+            return o.children[0];
+        },
+        localSet : function (key, data) {
+            if (typeof data == 'object') {
+                this.localStorageSet(key, JSON.stringify(data))
+            } else {
+                this.localStorageSet(key, data)
+            }
+        },
+        localGet : function (key, destroy) {
+            var val;
+            try {
+                val = localStorage.getItem(key);
+                destroy && localStorage.removeItem(key); //是否取完立即删除
+                return JSON.parse(val);
+            } catch (e) {
+                return val;
+            }
+        },
+        sessionSet : function (key, data) {
+            if (typeof data == 'object') {
+                this.sessionStorageSet(key, JSON.stringify(data))
+            } else {
+                this.sessionStorageSet(key, data)
+            }
+        },
+        sessionGet : function (key) {
+            var val;
+            try {
+                val = sessionStorage.getItem(key);
+                return JSON.parse(val);
+            } catch (e) {
+                return val;
+            }
+        },
+        /*localStorage.setItem*/
+        localStorageSet : function (key, value) {
+            if (typeof localStorage === 'object') {
+                try {
+                    localStorage.setItem(key, value);
+                } catch (e) {
+                    xy.cue.alert('请关闭无痕浏览模式');
+                }
+            }
+        },
+        /*sessionStorage.setItem*/
+        sessionStorageSet : function (key, value) {
+            if (typeof sessionStorage === 'object') {
+                try {
+                    sessionStorage.setItem(key, value);
+                } catch (e) {
+                    xy.cue.alert('请关闭无痕浏览模式');
+                }
+            }
+        },
+        /**
+         * toFixed
+         * @param numb
+         * @param len
+         * @param type
+         * @returns {number}
+         */
+        toFixed : function (numb, len, type) {
+            var arr = (numb + '').split('.');
+            if(len <= 0 ) return numb;
+            if(type === 'floor'){
+                if(arr[1] && arr[1].length > len){
+                    return Number(arr[0] + '.' + arr[1].substr(0,len));
+                }else{
+                    return numb;
+                }
+            }else if (type === 'ceil'){
+                if(arr[1] && arr[1].length > len){
+                    return Number(arr[0] + '.' + arr[1].substr(0,len)) + Math.pow(10,-1*len);
+                }else{
+                    return numb;
+                }
+            }else{
+                if(arr[1] && arr[1].length > len){
+                    len = arr[1].length;
+                }
+                return Number(numb.toFixed(len));
+            }
+        }
+    }
+
+    /**
+     * ajax
+     * @param opts {JSON}
+     * @returns {XMLHttpRequest}
+     */
+    xy.ajax =  function (opts) {
+        var xhr = new XMLHttpRequest(), timeout = false, timer ,str = '' , txt , loadingTimer,
+            loading = function(on){
+                if(!dft.loading) return;
+                if(on){
+                    loadingTimer = setTimeout(function(){
+                        xy.cue.loading(1);
+                    },200);
+                }else{
+                    clearTimeout(loadingTimer);
+                    xy.cue.loading(0);
+                }
+            },
+            dft={
+                async : true,
+                type  : 'POST',
+                loading : false,
+                abortTip : false,
+                contentType: "text/plain;charset=UTF-8",
+                abnormal : function(data){
+                    //TODO 处理请求异常
+                }
+            };
+
+        xy.utils.extend(dft,opts);
+
+        loading(1);
+
+        if(!/http:/.test(dft.url)){
+            dft.url = xy.getConfig('DOMAIN') + dft.url;
+        }
+
+        timer = setTimeout(function () {
+            timeout = true;
+            xhr.abort();
+            loading(0);
+            dft.abortTip && xy.cue.toast('请求超时了！');
+        }, dft.timeout || xy.getConfig('TIME_OUT'));
+
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === 4) {
+                if (timeout) return;
+                clearTimeout(timer);
+                //处理返回二进制文件
+                if(dft.responseType === 'blob'){
+                    if(xhr.status === 200){
+                        dft.success && dft.success(xhr.response);
+                        loading(0);
+                    }else{
+                        dft.error && dft.error(xhr.response);
+                        loading(0);
+                    }
+                }else{
+                    txt = xhr.responseText;
+                    if (xhr.status === 200) {
+                        loading(0);
+                        try {
+                            if(txt && typeof txt !== 'object'){
+                                txt = JSON.parse(decodeURI(txt));
+                            }
+                            //TODO 对 接口正常返回和异常返回处理
+                            if(txt.responseCode === xy.getConfig('SUCCESS_CODE')){
+                                return dft.success && dft.success(txt);
+                            }else{
+                                return dft.abnormal && dft.abnormal(txt);
+                            }
+                        } catch (e) {
+                            xy.cue.alert('ajax success,next error' + xhr.responseText);
+                        }
+                    } else {
+                        loading(0);
+                        try {
+                            if(txt && typeof txt !== 'object'){
+                                txt = JSON.parse(decodeURI(txt));
+                            }
+                            return dft.error && dft.error(txt);
+                        } catch (e) {
+                            xy.cue.alert('ajax error,next error' + xhr.responseText);
+                        }
+                    }
+                }
+            }
+        };
+
+        if(dft.type.toLowerCase() === 'get'){
+            str = xy.utils.param(dft.data);
+            if(str){
+                dft.url += '?' + str;
+            }
+        }
+
+        if(dft.responseType === 'blob'){
+            xhr.responseType = 'blob'
+        }
+
+        xhr.open(dft.type, dft.url, dft.async);
+
+        xhr.setRequestHeader("Content-Type", dft.contentType);
+
+        if (dft.type.toLowerCase() === 'get') {
+            xhr.send(null);
+        } else {
+            xhr.send(JSON.stringify(dft.data));
+        }
+        return xhr;
+    }
+
+    /**
+     * 跳页
+     * otps {JOSN/number}
+     * @param opts
+     */
+    xy.pageSkip = function(opts){
+        var temp,str, n = 0, postfix = '', getLvl = function(s){
+            s.split('/').forEach(function(t){
+                t === '..'?(n++):(postfix += '/'+ t);
+            })
+            postfix = postfix.replace(/^\//,'');
+        };
+        if(typeof opts === 'number'){
+            window.history.go(opts);
+        }else if(typeof opts === 'string'){
+            temp = opts.split(',');
+            getLvl(temp[0]);
+            if(temp[1]){
+                window.location.replace(this.getDomainPath(n) + postfix);
+            }else{
+                window.location.href = this.getDomainPath(n) + postfix;
+            }
+        }else if(typeof opts === 'object'){
+            getLvl(opts.url);
+            if(xy.utils.isEmptyObject(opts.data)){
+                str = '';
+            }else{
+                str = '?' + xy.utils.param(opts.data);
+            }
+            if(opts.replace === true){
+                window.location.replace(this.getDomainPath(n) + postfix + str);
+            }else{
+                window.location.href = this.getDomainPath(n) + postfix + str;
+            }
+        }
+    }
+
+    /**
+     * 获取当前n级绝对路径
+     * @param n {number/string}
+     * @returns {string}
+     */
+    xy.getDomainPath = function (n) {
+        var reg = null, str = '.*?\\/', sc = '';
+        str = '.*?\\/';
+        i = 0;
+        n = n || 0;
+        for (; i < n; i++) {
+            sc += str;
+        }
+        reg = new RegExp('(.*\\/)' + sc + '.*?\\.html\\??');
+        reg.exec(window.location.href);
+        return RegExp.$1;
+    }
+    /**
+     * 提示模块
+     * @type {{}}
+     */
+    xy.cue = {
+        /**
+         * 加载提示
+         * @param on {boolean}
+         * @param msg {string/number}
+         */
+        loading : function(on,msg){
+            this._first && this._init();
+            if(on){
+                if(!this._loadingCount){
+                    this._changeLoadingTxt(msg)._show(this._loadingEl,'loading');
+                }
+                this._loadingCount ++;
+            }else{
+                if(this._loadingCount){
+                    this._loadingCount --;
+                    if(!this._loadingCount) this._hide(this._loadingEl,'loading');
+                }
+            }
+        },
+        /**
+         * 吐司提示
+         * @param msg {string/number}
+         * @param cb {function}
+         */
+        toast : function(msg,cb){
+            this._first && this._init();
+            this._list.push({
+                id: new Date().getTime() + Math.random(),
+                type : 'toast',
+                msg : msg,
+                cb : cb,
+                exec : function(){
+                    var _this = this;
+                    xy.cue._loadingEl.style.opacity = '0';
+                    xy.cue._changeToastTxt(this.msg)._show(xy.cue._toastEl,this.type);
+                    setTimeout(function(){
+                        xy.cue._hide(xy.cue._toastEl,_this.type)._remove()._next();
+                        _this.cb && _this.cb();
+                    },2000);
+                },
+            });
+            this._begin();
+        },
+        /**
+         * 警告提示
+         * @param msg
+         * @param cb
+         */
+        alert : function(msg,cb){
+            this._first && this._init();
+            this._list.push({
+                id: new Date().getTime() + Math.random(),
+                type : 'alert',
+                msg : msg,
+                cb : cb,
+                exec : function(){
+                    var _this =this;
+                    xy.cue._loadingEl.style.opacity = '0';
+                    xy.cue._changeAlertTxt(this.msg)._show(xy.cue._alertEl,_this.type);
+                    xy.cue._alertCB = function(){
+                        xy.cue._hide(xy.cue._alertEl,_this.type)._remove()._next();
+                        _this.cb && _this.cb();
+                    }
+                }
+            });
+            this._begin();
+        },
+        /**
+         * 确定取消提示框
+         * @param msg {string/number}
+         * @param cb {function}
+         */
+        confirm : function(msg,cb,cb1){
+            this._first && this._init();
+            this._list.push({
+                id: new Date().getTime() + Math.random(),
+                type : 'confirm',
+                msg : msg,
+                cb : cb,
+                cb1 : cb1,
+                exec : function(){
+                    var _this =this;
+                    xy.cue._loadingEl.style.opacity = '0';
+                    xy.cue._changeConfirmTxt(this.msg)._show(xy.cue._confirmEl,_this.type);
+                    xy.cue._confirmCB = function(op){
+                        xy.cue._hide(xy.cue._confirmEl,_this.type)._remove()._next();
+                        if(op){
+                            _this.cb && _this.cb();
+                        }else{
+                            _this.cb1 && _this.cb1();
+                        }
+                    }
+                }
+            });
+            this._begin();
+        },
+
+        _first : true,
+        _loadingCount: 0,
+        _alertCB : null,
+        _confirmCB : null,
+        _list : [],
+        _show : function(el,type){
+            el.style.display = 'table';
+            if(type === 'alert' || type === 'confirm'){
+                document.querySelector('.content,.container').classList.add('filter');
+            }
+            return this;
+        },
+        _hide : function(el,type){
+            el.style.display = 'none';
+            if(type === 'alert' || type === 'confirm'){
+                document.querySelector('.content,.container').classList.remove('filter');
+            }
+            return this;
+        },
+        _remove : function (id){
+            this._list[0] && this._list.shift(0);
+            return this;
+        },
+        _begin : function(){
+            if(!this._cuing && this._list[0]){
+                this._cuing = true;
+                this._list[0].exec();
+            }
+        },
+        _next : function(){
+            if(this._list[0]){
+                var _this=this;
+                setTimeout(function(){
+                    _this._list[0].exec();
+                    _this._cuing =true;
+                },16)
+                return this;
+            }
+            xy.cue._loadingEl.style.opacity = '1';
+            this._cuing =false;
+            return this;
+        },
+
+        _init : function(){
+            delete this._first;
+            var ob = document.querySelector('body'), loading, toast;
+            //loading...
+            this._loadingEl = xy.utils.html('<div class="loading"><div class="loading-panel"><div class="loading-content"><div class="upper"><div class="loading-pic circle-ani"></div></div><div class="lower"></div></div></div></div>');
+            this._changeLoadingTxt = function (msg){
+                this._loadingEl.querySelector('.lower').innerHTML = msg || '信息加载中...';
+                return this;
+            }
+            ob.appendChild(this._loadingEl);
+            //toast...
+            this._toastEl = xy.utils.html('<div class="toast" ><div class="toast-panel"><div class="toast-content">&nbsp;</div></div></div>');
+            this._changeToastTxt = function (msg){
+                this._toastEl.querySelector('.toast-content').innerHTML = msg || '请您注意了！';
+                return this;
+            }
+            ob.appendChild(this._toastEl);
+            //alert...
+            this._alertEl = xy.utils.html('<div class="alert mask"><div class="alert-panel"><div class="alert-content"><p class="header">注意</p><p class="body">&nbsp;</p><p class="footer sure">确定</p></div></div></div>');
+            this._changeAlertTxt = function (msg){
+                this._alertEl.querySelector('.body').innerHTML = msg || '请您注意了！';
+                return this;
+            }
+            this._alertEl.querySelector('.sure').addEventListener('click',function(){
+                xy.cue._alertCB && xy.cue._alertCB();
+            },!1);
+            ob.appendChild(this._alertEl);
+            //confirm...
+            this._confirmEl = xy.utils.html('<div class="confirm mask"><div class="confirm-panel"><div class="confirm-content"><p class="header">注意</p><p class="body">&nbsp;</p><div class="footer"><p class="cell-l cancel">取消</p><p class="cell-r sure">确定</p></div></div></div></div>');
+            this._changeConfirmTxt = function (msg){
+                this._confirmEl.querySelector('.body').innerHTML = msg || '您确定要这样操作？';
+                return this;
+            }
+            this._confirmEl.querySelector('.sure').addEventListener('click',function(){
+                xy.cue._confirmCB && xy.cue._confirmCB(1);
+            },!1);
+            this._confirmEl.querySelector('.cancel').addEventListener('click',function(){
+                xy.cue._confirmCB && xy.cue._confirmCB(0);
+            },!1);
+            ob.appendChild(this._confirmEl);
+        }
+    }
+
+    xy.scrollRefresh = function(el,pulldownFn,pullupFn){
+        var iscroll = new IScroll('#wrapper', {
+            refresh: true,
+            probeType: 2,
+            animateSpeed: 55,
+            animateBeginOffset: 70,
+            borderColor: '#0394fb',
+            borderBGColor: '#fff',
+            BGColor: '#e1e1e1',
+        });
+
+        iscroll.on('pullDownRefresh', function () {
+            pulldownFn && pulldownFn();
+        })
+        iscroll.on('pullUpRefresh', function () {
+            pullupFn && pullupFn();
+        })
+
+        return iscroll;
+    }
+
+    /**
+     * 移动端浏览器判断
+     */
+    ;(function (ua) {
+        xy.os = {};
+        var funcs = [
+            function () { //wechat
+                var wechat = ua.match(/(MicroMessenger)\/([\d\.]+)/i);
+                if (wechat) { //wechat
+                    this.os.wechat = {
+                        version: wechat[2].replace(/_/g, '.')
+                    };
+                }
+                return false;
+            },
+            function () { //android
+                var android = ua.match(/(Android);?[\s\/]+([\d.]+)?/);
+                if (android) {
+                    this.os.android = true;
+                    this.os.version = android[2];
+
+                    this.os.isBadAndroid = !(/Chrome\/\d/.test(window.navigator.appVersion));
+                }
+                return this.os.android === true;
+            },
+            function () { //ios
+                var iphone = ua.match(/(iPhone\sOS)\s([\d_]+)/);
+                if (iphone) { //iphone
+                    this.os.ios = this.os.iphone = true;
+                    this.os.version = iphone[2].replace(/_/g, '.');
+                } else {
+                    var ipad = ua.match(/(iPad).*OS\s([\d_]+)/);
+                    if (ipad) { //ipad
+                        this.os.ios = this.os.ipad = true;
+                        this.os.version = ipad[2].replace(/_/g, '.');
+                    }
+                }
+                return this.os.ios === true;
+            }
+        ];
+        [].every.call(funcs, function (func) {
+            return !func.call(xy);
+        });
+    })(window.navigator.userAgent);
+
+    //****业务级共用代码由此开始*****//
+
+    //****与原生app混合代码由此开始*****//
+    xy.plus = {
+        nextPage : function(se){
+            this.ai('nextPage',se);
+        },
+        ai : function (type,se){
+            if(xy.os.ios){
+                try{
+                    window.webkit.messageHandlers[type].postMessage(JSON.stringify(se));
+                }catch (e){
+                    alert('错误' + e);
+                }
+            }else if(xy.os.android){
+                try{
+                    window.plus[type](JSON.stringify(se));
+                }catch (e){
+                    alert('错误' + e);
+                }
+            }
+        }
+    }
+
+})(window,document,window.xy = {});
