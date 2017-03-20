@@ -1,2 +1,2 @@
 # wq
-collect write
+collect write just little store
