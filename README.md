@@ -1,2 +1,2 @@
 # wq
-collect write just little store !!
+collect code just little store !!
