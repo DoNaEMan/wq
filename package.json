@@ -1,5 +1,5 @@
 {
-  "name": "xymb",
+  "name": "wq",
   "version": "1.0.0",
   "description": "this is a xy merchant project",
   "main": "index.js",
@@ -10,6 +10,7 @@
     "gulp-clean-css": "^3.0.3",
     "gulp-concat": "^2.6.1",
     "gulp-connect": "^5.0.0",
+    "gulp-cssimport": "^5.0.0",
     "gulp-htmlmin": "^3.0.0",
     "gulp-imagemin": "^3.1.1",
     "gulp-jshint": "^2.0.4",

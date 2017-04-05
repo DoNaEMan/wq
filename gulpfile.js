@@ -10,6 +10,7 @@ var gulp = require('gulp'), //本地安装gulp所用到的地方
     rename = require('gulp-rename'),//文件更名
     notify = require('gulp-notify'),//提示信息
     connect = require('gulp-connect'),
+    cssimport = require("gulp-cssimport"),
     changed = require('gulp-changed');
 
 var srcCss = ['src/css/*.css', 'src/css/**/*.css'],
@@ -41,7 +42,7 @@ gulp.task('html', function () {
 // 压缩图片
 gulp.task('img', function () {
     return gulp.src(srcImg, {base: srcBase})
-    //.pipe(imagemin())
+        .pipe(imagemin())
         .pipe(changed(dist))
         .pipe(gulp.dest(dist))
         .pipe(notify({message: 'img task ok'}));
@@ -54,6 +55,7 @@ gulp.task('css', function () {
     //.pipe(gulp.dest('dist/css'))
     //.pipe(rename({ suffix: '.min' }))
         .pipe(changed(dist, {extension: '.css'}))
+        .pipe(cssimport({}))
         .pipe(minifycss())
         .pipe(gulp.dest(dist))
         .pipe(notify({message: 'css task ok'}))
