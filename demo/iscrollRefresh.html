@@ -5,47 +5,59 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <meta name="viewport" content="initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
     <title>Document</title>
+    <script src="../src/js/flex.js"></script>
     <link rel="stylesheet" href="../src/css/common.css">
     <style>
         html, body { height: 100%; }
         li { height: 100px; background-color: #068be9; }
+        .no-data {position:absolute;height:100%;width:100%;}
     </style>
 </head>
 <body>
 <div id="wrapper" class="iwrapper content">
     <div class="scroller">
         <ul>
-            <li>
-            </li>
+            <li>0</li>
         </ul>
     </div>
 </div>
 </body>
 <script src="../src/js/common.js?111"></script>
-<script src="../src/js/iscroll-probe.js"></script>
+<script src="../src/js/iscroll-probe.js?!11"></script>
 <script>
-    (function () {
+
+        var count = 1;
         var scroll = new IScroll("#wrapper", {
             refresh: true,
             probeType: 2,
-            animateSpeed: 55,
-            animateBeginOffset: 70,
+            animateSpeed: 20,
+            animateBeginOffset: 30,
             borderColor: '#0394fb',
             borderBGColor: '#fff',
-            BGColor: '#e1e1e1'
+            BGColor: '#e1e1e1',
         });
 
         scroll.on('pullDownRefresh', function () {
             setTimeout(function () {
+                count =1;
                 scroll.pullDownOver();
             }, 1000)
         })
         scroll.on('pullUpRefresh', function () {
             setTimeout(function () {
-                scroll.pullUpOver(true);
-            }, 0);
+                if(count >=  10){
+                    scroll.pullUpOver(true);
+                }else{
+                    document.querySelector('ul').appendChild(xy.html('<li>'+count+'</li>'));
+                    scroll.pullUpOver(false);
+                }
+                count ++;
+            }, 1000);
         })
-    })();
+
+        scroll.on('scroll', function () {
+            console.log(1)
+        })
 
 </script>
 </html>

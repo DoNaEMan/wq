@@ -4,89 +4,67 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
     <title>Title</title>
+    <script src="../src/js/flex.js"></script>
     <link rel="stylesheet" href="../src/css/common.css">
     <style>
-        li{box-sizing:border-box;height:50px;border: 1px solid;}
-        html,body{height:100%;overflow: hidden;}
-        .div1{height:100%;overflow: auto;}
+        li { box-sizing: border-box; height: 50px; border: 1px solid; }
+        html, body { height: 100%; overflow: hidden; }
     </style>
 </head>
 <body>
-<div class="div1">
+<div class="demo">
     <div class="native-scroller">
         <ul>
-            <li>item 1</li>
-            <li>item 2</li>
-            <li>item 3</li>
-            <li>item 4</li>
-            <li>item 5</li>
-            <li>item 6</li>
-            <li>item 7</li>
-            <li>item 8</li>
-            <li>item 9</li>
-            <li>item 10</li>
-            <li>item 11</li>
-            <li>item 12</li>
-            <li>item 13</li>
-            <li>item 14</li>
-            <li>item 15</li>
-            <li>item 16</li>
-            <li>item 17</li>
-            <li>item 18</li>
-            <li>item 19</li>
-            <li>item 20</li>
+            <li>国际劳动节 1</li>
+            <li>国际劳动节 2</li>
+            <li>国际劳动节 3</li>
+            <li>国际劳动节 4</li>
+            <li>国际劳动节 5</li>
+            <li>国际劳动节 6</li>
+            <li>国际劳动节 7</li>
+            <li>国际劳动节 8</li>
+            <li>国际劳动节 9</li>
+            <li>国际劳动节 10</li>
+            <li>国际劳动节 11</li>
+            <li>国际劳动节 12</li>
+            <li>国际劳动节 13</li>
+            <li>国际劳动节 14</li>
+            <li>国际劳动节 15</li>
         </ul>
     </div>
-    <!--<div class="native-pull-up-tips">
-        <div></div>
-        <div>正在刷新中...</div>
-    </div>-->
 </div>
-</body>
-<script src = "../src/js/common.js"></script>
+<script src="../src/js/common.js"></script>
+<script src="../src/js/touch-0.2.14.js"></script>
+<script src="../src/js/native-refresh.js"></script>
 <script>
-    function NativeRefresh(el,opts){
 
-        this.isWindow = el === window;
-        this.wapper = typeof el === 'string' ? document.querySelector(el) : this.isWindow ? window : el;
-        this.scroller = this.wapper.querySelector('.native-scroller');
 
-        this._init();
-    }
+    var iss = 15;
+    var w = new NativeRefresh('.demo', {
+        pullUpCallBack: function () {
+            setTimeout(function () {
+                iss++;
+                if (iss >= 20) {
+                    w.pullUpOver(true);
+                } else {
+                    document.querySelector('ul').appendChild(xy.html('<li>item ' + iss + '</li>'));
+                    w.pullUpOver(false);
+                }
 
-    NativeRefresh.prototype = {
-        version : '1.0.0',
-
-        _init : function (){
-            var _this = this;
-
-            this.wapper.addEventListener('scroll',function (){
-                console.log(_this._scrollTop());
-            });
-
-            //加入提示元素
-            this.pullUpTipBox = xy.html('<div class="native-pull-up-tips"><div></div><div>正在刷新中...</div></div>');
-            this.scroller.appendChild(this.pullUpTipBox)
-
-            this.refresh();
+            }, 1000)
         },
-        _scrollTop : function (){
-            if(this.isWindow){
-                return document.body.scrollTop || this.documentElement.scrollTop;
-            }else{
-                return this.wapper.scrollTop;
-            }
+        pullDownCallBack: function () {
+            setTimeout(function () {
+                w.pullDownOver(false);
+            }, 3000)
         },
-
-        refresh : function (){
-
-            this.maxScrollY = this.isWindow ? window.innerHeight - document.body.offsetHeight : this.wapper.offsetHeight - this.scroller.offsetHeight;
-            this.maxScrollY = this.maxScrollY < 0 ? - this.maxScrollY : 0;
-        }
-
-    }
-
-    var w = new NativeRefresh('.div1',{});
+        scroll: function(){
+            console.log(1)
+        },
+        borderColor: '#0394fb',
+    });
 
 </script>
+</body>
+
 </html>

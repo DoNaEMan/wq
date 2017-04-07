@@ -86,7 +86,7 @@
             return result;
         };
         me.isEmptyObject = function (c) {
-            for (i in c) {
+            for (var i in c) {
                 return false;
             }
             return true;

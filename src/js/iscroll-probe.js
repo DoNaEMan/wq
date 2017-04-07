@@ -280,10 +280,10 @@
             tips: {
                 PULLDOWN1: "继续下拉可刷新",
                 PULLDOWN2: "松手开始刷新",
-                PULLDOWN3: "正在刷新...",
+                PULLDOWN3: "正在刷新中...",
                 PULLUP1: "继续上拉可加载",
                 PULLUP2: "松手开始加载",
-                PULLUP3: "正在加载...",
+                PULLUP3: "正在加载中...",
                 PULLUPEND: '已经没有更多了'
             },
             createElem: function (s) {
@@ -291,27 +291,31 @@
                 oDiv.innerHTML = s;
                 return oDiv.children[0];
             },
-            init:function(){
-                me.extend(IScroll.prototype,this.plus);
+            init: function () {
+                me.extend(IScroll.prototype, this.plus);
             },
             plus: {
                 //初始化
                 _pullRefreshInit: function () {
+                    var pullUpBox = utils.refresh.createElem('<div class="pull-up"><div class="wrap"><canvas height="100" width="100"></canvas><div class="tips"></div></div></div>'),
+                        pullDownBox = utils.refresh.createElem('<div class="pull-down"><div class="wrap"><canvas height="100" width="100"></canvas><div class="tips"></div></div></div>');
+
                     this.disablePullUpLoad = false;
+
                     if (!this.wrapper.querySelector('.pull-down')) {
-                        this.scroller.insertBefore(utils.refresh.createElem('<div class="pull-down"><div class="wrap"><canvas height="100" width="100"></canvas></div><div class="tips"></div></div>'), this.scroller.children[0]);
+                        this.scroller.insertBefore(pullDownBox, this.scroller.children[0]);
                     }
                     if (!this.wrapper.querySelector('.pull-up')) {
-                        this.scroller.appendChild(utils.refresh.createElem('<div class="pull-up"><div class="wrap"><canvas height="100" width="100"></canvas></div><div class="tips"></div></div>'));
+                        this.scroller.appendChild(pullUpBox);
                     }
 
                     this.limitFloorY = 0;
-                    this.pullDownTipBox = this.wrapper.querySelector('.pull-down').querySelector('.tips');
-                    this.pullUpTipBox = this.wrapper.querySelector('.pull-up').querySelector('.tips');
-                    this.pullDownBoxHeight = this.wrapper.querySelector('.pull-down').offsetHeight;
-                    this.pullUpBoxHeight = this.wrapper.querySelector('.pull-up').offsetHeight;
-                    this.pullDownCanvas = this.wrapper.querySelector('.pull-down').querySelector('canvas');
-                    this.pullUpCanvas = this.wrapper.querySelector('.pull-up').querySelector('canvas');
+                    this.pullDownTipBox = pullDownBox.querySelector('.tips');
+                    this.pullUpTipBox = pullUpBox.querySelector('.tips');
+                    this.pullDownBoxHeight = pullDownBox.offsetHeight;
+                    this.pullUpBoxHeight = pullUpBox.offsetHeight;
+                    this.pullDownCanvas = pullDownBox.querySelector('canvas');
+                    this.pullUpCanvas = pullUpBox.querySelector('canvas');
                     this.pullDownTipBox.innerHTML = utils.refresh.tips.PULLDOWN1;
                     this.pullUpTipBox.innerHTML = utils.refresh.tips.PULLUP1;
                     this.scroller.style.minHeight = this.wrapper.clientHeight + 'px';
@@ -364,6 +368,7 @@
                         x = this.maxScrollX;
                     }
 
+                    /*TODO:add*/
                     if (this.options.refresh) {
                         if (this.y > this.limitFloorY) {
                             if (this.pullDownRatio > 1 && !this.pullUpRefreshing) {
@@ -388,7 +393,7 @@
                         if (x == this.x && y == this.y) {
                             return false;
                         }
-
+                        /*TODO:end*/
                     } else {
                         if (!this.hasHorizontalScroll || this.x > 0) {
                             x = 0;
@@ -414,6 +419,7 @@
                  * @param disablePullUpRefresh {boolean} 是否禁用上拉加载
                  */
                 refresh: function (bounceEase, disablePullUpRefresh, direction) {
+                    /*TODO:add*/
                     if (this.options.refresh && bounceEase) {
                         this.pullDownRatio = 0;
                         this.pullUpRatio = 0;
@@ -424,8 +430,12 @@
                         this.pullUpTipBox.innerText = utils.refresh.tips.PULLUP1;
                         this._clearCircle();
                     }
+                    /*TODO:end*/
 
                     var rf = this.wrapper.offsetHeight;		// Force reflow
+                    /*TODO:add force bounce*/
+                    this.scroller.style.minHeight = this.wrapper.clientHeight + 'px';
+                    /*TODO:end force bounce*/
 
                     this.wrapperWidth = this.wrapper.clientWidth;
                     this.wrapperHeight = this.wrapper.clientHeight;
@@ -441,13 +451,10 @@
                     /* REPLACE END: refresh */
 
                     this.hasHorizontalScroll = this.options.scrollX && this.maxScrollX < 0;
-                    this.hasVerticalScroll = this.options.scrollY && this.maxScrollY < 0;
-                    /**
-                     * scroller搞好撑满warpper也可回弹
-                     */
-                    if (this.options.refresh) {
-                        this.hasVerticalScroll = this.options.scrollY && this.maxScrollY <= 0;
-                    }
+                    //this.hasVerticalScroll = this.options.scrollY && this.maxScrollY < 0;
+                    /*TODO:add force bounce*/
+                    this.hasVerticalScroll = this.options.scrollY && this.maxScrollY <= 0;
+                    /*TODO:end force bounce*/
 
                     if (!this.hasHorizontalScroll) {
                         this.maxScrollX = 0;
@@ -466,6 +473,7 @@
 
                     this.wrapperOffset = utils.offset(this.wrapper);
 
+                    /*TODO:add*/
                     if (this.options.refresh) {
                         if (disablePullUpRefresh === true) {
                             //禁用下拉
@@ -478,16 +486,19 @@
                             this.disablePullUp();
                         }
                     }
+                    /*TODO:end*/
 
                     this._execEvent('refresh');
+
+                    /*TODO:add*/
                     if (bounceEase) {
-                        if (direction === 2 && disablePullUpRefresh === false) return;
+                        //if (direction === 2 && disablePullUpRefresh === false) return;
                         this.resetPosition(this.options.bounceTime);
                     } else {
                         this.resetPosition();
                     }
-
-// INSERT POINT: _refresh
+                    /*TODO:end*/
+                    // INSERT POINT: _refresh
 
                 },
                 //拉动动画
@@ -537,29 +548,29 @@
                 _startTurnRound: function (direction) {
                     if (this.pullUpRefreshing || this.pullDownRefreshing) return;
                     if (direction === 2) {
-                        this.wrapper.querySelector('.pull-up .wrap').classList.add('circle-ani');
+                        this.wrapper.querySelector('.pull-up canvas').classList.add('circle-ani');
                     } else if (direction === 1) {
-                        this.wrapper.querySelector('.pull-down .wrap').classList.add('circle-ani');
+                        this.wrapper.querySelector('.pull-down canvas').classList.add('circle-ani');
                     }
                 },
                 _endTurnRound: function (direction) {
                     if (this.pullUpRefreshing || this.pullDownRefreshing) return;
                     if (direction === 2) {
                         this._drawCircle(0, 2);
-                        this.wrapper.querySelector('.pull-up .wrap').classList.remove('circle-ani');
+                        this.wrapper.querySelector('.pull-up canvas').classList.remove('circle-ani');
                     } else if (direction === 1) {
                         this._drawCircle(0, 1);
-                        this.wrapper.querySelector('.pull-down .wrap').classList.remove('circle-ani');
+                        this.wrapper.querySelector('.pull-down canvas').classList.remove('circle-ani');
                     }
 
                 },
                 _clearCircle: function (direction, time) {
                     if (this.pullUpRefreshing || this.pullDownRefreshing) return;
-                    var _this=this;
-                    setTimeout(function(){
+                    var _this = this;
+                    setTimeout(function () {
                         _this._endTurnRound(1);
                         _this._endTurnRound(2);
-                    },50);
+                    }, 50);
                 },
 
                 triggerPullDown: function () {
@@ -574,24 +585,29 @@
                  * @param bl {boolean} 是否禁用上拉加载
                  */
                 disablePullUp: function (bl) {
+                    var contentHeight, pullUpBoxStyle;
                     if (typeof bl === "boolean") {
                         this.disablePullUpLoad = bl
                     } else {
                         bl = this.disablePullUpLoad;
                     }
+
+                    pullUpBoxStyle = this.wrapper.querySelector('.pull-up').style;
+
                     if (bl) {
-                        var contentHeight = this.scroller.children[1].offsetHeight;
+                        contentHeight = this.scroller.children[1].offsetHeight;
                         if (contentHeight <= this.scrollerHeight - this.pullUpBoxHeight) {
-                            this.wrapper.querySelector('.pull-up').style.bottom = this.scrollerHeight - contentHeight - this.pullDownBoxHeight + 'px';
-                        } else if (this.scrollerHeight - this.pullUpBoxHeight < contentHeight && contentHeight < this.scrollerHeight + this.pullUpBoxHeight) {
-                            this.maxScrollY = this.maxScrollY - (contentHeight + this.pullUpBoxHeight - this.scrollerHeight);
-                            this.wrapper.querySelector('.pull-up').style.bottom = -(contentHeight + this.pullUpBoxHeight - this.scrollerHeight) + 'px';
+                            pullUpBoxStyle.bottom = this.scrollerHeight - contentHeight - this.pullDownBoxHeight + 'px';
+                        } else if (contentHeight > this.scrollerHeight - this.pullUpBoxHeight &&
+                            contentHeight < this.scrollerHeight + this.pullUpBoxHeight) {
+                            this.maxScrollY -= (contentHeight + this.pullUpBoxHeight - this.scrollerHeight);
+                            pullUpBoxStyle.bottom = -(contentHeight + this.pullUpBoxHeight - this.scrollerHeight) + 'px';
                         } else {
-                            this.wrapper.querySelector('.pull-up').style.bottom = -this.pullUpBoxHeight + 'px';
+                            pullUpBoxStyle.bottom = -this.pullUpBoxHeight + 'px';
                         }
                         this.pullUpTipBox.innerHTML = utils.refresh.tips.PULLUPEND;
                     } else {
-                        this.wrapper.querySelector('.pull-up').style.bottom = -this.pullUpBoxHeight + 'px';
+                        pullUpBoxStyle.bottom = -this.pullUpBoxHeight + 'px';
                     }
                 },
                 /**
