@@ -492,21 +492,21 @@
             delete this._first;
             var ob = document.querySelector('body'), loading, toast;
             //loading...
-            this._loadingEl = xy.utils.html('<div class="loading"><div class="loading-panel"><div class="loading-content"><div class="upper"><div class="loading-pic circle-ani"></div></div><div class="lower"></div></div></div></div>');
+            this._loadingEl = xy.html('<div class="loading"><div class="loading-panel"><div class="loading-content"><div class="upper"><div class="loading-pic circle-ani"></div></div><div class="lower"></div></div></div></div>');
             this._changeLoadingTxt = function (msg) {
                 this._loadingEl.querySelector('.lower').innerHTML = msg || '信息加载中...';
                 return this;
             }
             ob.appendChild(this._loadingEl);
             //toast...
-            this._toastEl = xy.utils.html('<div class="toast" ><div class="toast-panel"><div class="toast-content">&nbsp;</div></div></div>');
+            this._toastEl = xy.html('<div class="toast" ><div class="toast-panel"><div class="toast-content">&nbsp;</div></div></div>');
             this._changeToastTxt = function (msg) {
                 this._toastEl.querySelector('.toast-content').innerHTML = msg || '请您注意了！';
                 return this;
             }
             ob.appendChild(this._toastEl);
             //alert...
-            this._alertEl = xy.utils.html('<div class="alert mask"><div class="alert-panel"><div class="alert-content"><p class="header">注意</p><p class="body">&nbsp;</p><p class="footer sure">确定</p></div></div></div>');
+            this._alertEl = xy.html('<div class="alert mask"><div class="alert-panel"><div class="alert-content"><p class="header">注意</p><p class="body">&nbsp;</p><p class="footer sure">确定</p></div></div></div>');
             this._changeAlertTxt = function (msg) {
                 this._alertEl.querySelector('.body').innerHTML = msg || '请您注意了！';
                 return this;
@@ -516,7 +516,7 @@
             }, !1);
             ob.appendChild(this._alertEl);
             //confirm...
-            this._confirmEl = xy.utils.html('<div class="confirm mask"><div class="confirm-panel"><div class="confirm-content"><p class="header">注意</p><p class="body">&nbsp;</p><div class="footer"><p class="cell-l cancel">取消</p><p class="cell-r sure">确定</p></div></div></div></div>');
+            this._confirmEl = xy.html('<div class="confirm mask"><div class="confirm-panel"><div class="confirm-content"><p class="header">注意</p><p class="body">&nbsp;</p><div class="footer"><p class="cell-l cancel">取消</p><p class="cell-r sure">确定</p></div></div></div></div>');
             this._changeConfirmTxt = function (msg) {
                 this._confirmEl.querySelector('.body').innerHTML = msg || '您确定要这样操作？';
                 return this;
