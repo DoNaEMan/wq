@@ -1,6 +1,6 @@
 (function (window, document, xy) {
     var config = {
-        DOMAIN: 'https://ccapp.cib.com.cn/o2o-merchant-api',
+        DOMAIN: 'https://ccapp.cib.com.cn/o2o-api',
         SUCCESS_CODE: '000000',
         TIME_OUT: 10000,
     };
@@ -451,16 +451,20 @@
         _confirmCB: null,
         _list: [],
         _show: function (el, type) {
+            var c;
             el.style.display = 'table';
             if (type === 'alert' || type === 'confirm') {
-                document.querySelector('.content,.container').classList.add('filter');
+                c = document.querySelector('.content,.container');
+                c && c.classList.add('filter');
             }
             return this;
         },
         _hide: function (el, type) {
+            var c;
             el.style.display = 'none';
             if (type === 'alert' || type === 'confirm') {
-                document.querySelector('.content,.container').classList.remove('filter');
+                c = document.querySelector('.content,.container');
+                c && c.classList.add('filter');
             }
             return this;
         },
@@ -506,7 +510,7 @@
             }
             ob.appendChild(this._toastEl);
             //alert...
-            this._alertEl = xy.html('<div class="alert mask"><div class="alert-panel"><div class="alert-content"><p class="header">注意</p><p class="body">&nbsp;</p><p class="footer sure">确定</p></div></div></div>');
+            this._alertEl = xy.html('<div class="alert mask"><div class="alert-panel"><div class="alert-content"><p class="header">注意</p><p class="body">&nbsp;</p><p class="footer sure bw">确定</p></div></div></div>');
             this._changeAlertTxt = function (msg) {
                 this._alertEl.querySelector('.body').innerHTML = msg || '请您注意了！';
                 return this;
@@ -516,7 +520,7 @@
             }, !1);
             ob.appendChild(this._alertEl);
             //confirm...
-            this._confirmEl = xy.html('<div class="confirm mask"><div class="confirm-panel"><div class="confirm-content"><p class="header">注意</p><p class="body">&nbsp;</p><div class="footer"><p class="cell-l cancel">取消</p><p class="cell-r sure">确定</p></div></div></div></div>');
+            this._confirmEl = xy.html('<div class="confirm mask"><div class="confirm-panel"><div class="confirm-content"><p class="header">注意</p><p class="body">&nbsp;</p><div class="footer bw"><p class="cell-l cancel bw">取消</p><p class="cell-r sure">确定</p></div></div></div></div>');
             this._changeConfirmTxt = function (msg) {
                 this._confirmEl.querySelector('.body').innerHTML = msg || '您确定要这样操作？';
                 return this;
@@ -598,8 +602,6 @@
         });
     })(window.navigator.userAgent);
 
-    //****业务级共用代码由此开始*****//
-
     //****与原生app混合代码由此开始*****//
     xy.plus = {
         nextPage: function (se) {
@@ -623,3 +625,7 @@
     }
 
 })(window, document, window.xy = {});
+//****业务级共用代码由此开始*****//
+(function(window,document,xy){
+
+})(window,document,xy);

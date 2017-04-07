@@ -21,7 +21,7 @@
         fontSize = '16px';
     }
     if(isIPhone){
-        borderWidth = (1 / designDraftFontSize < 1 / dpr ? 1 / dpr : 1 / designDraftFontSize) + 'rem';
+        borderWidth = (1 / designDraftFontSize) + 'rem';
     }
     doc.write('<style>body{font-size:' + fontSize + ';}.bw{border-width:'+borderWidth+';}</style>');
 }(window, document, Math))
