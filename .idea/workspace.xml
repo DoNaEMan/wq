@@ -3,9 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="f42f644b-dadd-4fe3-b3bf-fe2e5f693a7a" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/demo/testSize.html" afterPath="$PROJECT_DIR$/demo/testSize.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dist/js/flex.js" afterPath="$PROJECT_DIR$/dist/js/flex.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/js/flex.js" afterPath="$PROJECT_DIR$/src/js/flex.js" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
@@ -323,11 +320,18 @@
       <option name="project" value="LOCAL" />
       <updated>1491537425481</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="add some">
+      <created>1491543462190</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1491543462190</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="1935000" />
+    <option name="totallyTimeSpent" value="1941000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="72" y="32" width="1249" height="745" extended-state="0" />
