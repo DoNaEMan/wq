@@ -1,0 +1,1 @@
+!function(e,t,i){var n=e.innerWidth,o=e.devicePixelRatio,x="12px",d=t.documentElement;d.style.fontSize=28*n/750+"px",d.style.maxWidth="750px",x=o>=2&&o<3?"14px":o>=1&&o<2?"12px":"16px",t.write("<style>body{font-size:"+x+";}</style>")}(window,document,Math);
