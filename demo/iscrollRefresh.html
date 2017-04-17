@@ -10,7 +10,7 @@
     <style>
         html, body { height: 100%; }
         li { height: 100px; background-color: #068be9; }
-        .no-data {position:absolute;height:100%;width:100%;}
+        .no-data { position: absolute; height: 100%; width: 100%; }
     </style>
 </head>
 <body>
@@ -23,41 +23,50 @@
 </div>
 </body>
 <script src="../src/js/common.js?111"></script>
-<script src="../src/js/iscroll-probe.js?!11"></script>
+<script src="../src/js/iscroll-lite.js"></script>
 <script>
 
-        var count = 1;
-        var scroll = new IScroll("#wrapper", {
-            refresh: true,
-            probeType: 2,
-            animateSpeed: 20,
-            animateBeginOffset: 30,
-            borderColor: '#0394fb',
-            borderBGColor: '#fff',
-            BGColor: '#e1e1e1',
-        });
+    var count = 1;
+    var scroll = new IScroll("#wrapper", {
+        refresh: false,
+        probeType: 2,
+        animateSpeed: 20,
+        animateBeginOffset: 30,
+        borderColor: '#0394fb',
+        borderBGColor: '#fff',
+        BGColor: '#e1e1e1',
+        tips: {
+            PULLDOWN1: "继续下拉可刷新",
+            PULLDOWN2: "松手开始刷新",
+            PULLDOWN3: "正在刷新中...",
+            PULLUP1: "继续上拉可加载",
+            PULLUP2: "松手开始加载",
+            PULLUP3: "正在加载中...",
+            PULLUPEND: '已经没有更多了'
+        },
+    });
 
-        scroll.on('pullDownRefresh', function () {
-            setTimeout(function () {
-                count =1;
-                scroll.pullDownOver();
-            }, 1000)
-        })
-        scroll.on('pullUpRefresh', function () {
-            setTimeout(function () {
-                if(count >=  10){
-                    scroll.pullUpOver(true);
-                }else{
-                    document.querySelector('ul').appendChild(xy.html('<li>'+count+'</li>'));
-                    scroll.pullUpOver(false);
-                }
-                count ++;
-            }, 1000);
-        })
+    scroll.on('pullDownRefresh', function () {
+        setTimeout(function () {
+            count = 1;
+            scroll.pullDownOver();
+        }, 1000)
+    })
+    scroll.on('pullUpRefresh', function () {
+        setTimeout(function () {
+            if (count >= 10) {
+                scroll.pullUpOver(true);
+            } else {
+                document.querySelector('ul').appendChild(xy.html('<li>' + count + '</li>'));
+                scroll.pullUpOver(false);
+            }
+            count++;
+        }, 1000);
+    })
 
-        scroll.on('scroll', function () {
-            console.log(1)
-        })
+    scroll.on('scroll', function () {
+        console.log(1)
+    });
 
 </script>
 </html>

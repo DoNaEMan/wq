@@ -699,7 +699,7 @@
             this.options.useTransition = false;
         }
 
-        this.options.invertWheelDirection = this.options.invertWheelDirection ? -1 : 1;
+        this.options.invertWheelDirection = this.options.ç ? -1 : 1;
 
         if (this.options.probeType == 3) {
             this.options.useTransition = false;

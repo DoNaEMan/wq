@@ -50,7 +50,7 @@
                 }
             };
 
-        me.prefixStyle = function(style) {
+        me.prefixStyle = function (style) {
             if (_vendor === false) return false;
             if (_vendor === '') return style;
             return _vendor + style.charAt(0).toUpperCase() + style.substr(1);
@@ -150,6 +150,15 @@
 
         return me;
     })();
+
+    window.rAF = window.requestAnimationFrame ||
+        window.webkitRequestAnimationFrame ||
+        window.mozRequestAnimationFrame ||
+        window.oRequestAnimationFrame ||
+        window.msRequestAnimationFrame ||
+        function (callback) {
+            window.setTimeout(callback, 1000 / 60);
+        };
 
     /**
      * ajax
@@ -271,23 +280,14 @@
     };
 
     //css3
-    xy.css3 = function (el,opt){
+    xy.css3 = function (el, opt) {
         var elStyle = el.style;
-        for(var i in opt){
+        for (var i in opt) {
             var s = xy.utils.prefixStyle(i);
-            if(s === false) continue;
+            if (s === false) continue;
             elStyle[s] = opt[i];
         }
     }
-
-    xy.rAF = window.requestAnimationFrame ||
-        window.webkitRequestAnimationFrame ||
-        window.mozRequestAnimationFrame ||
-        window.oRequestAnimationFrame ||
-        window.msRequestAnimationFrame ||
-        function (callback) {
-            window.setTimeout(callback, 1000 / 60);
-        };
 
     /**
      * 跳页
@@ -626,6 +626,46 @@
 
 })(window, document, window.xy = {});
 //****业务级共用代码由此开始*****//
-(function(window,document,xy){
+(function (window, document, xy) {
 
-})(window,document,xy);
+    window.test = function(a){
+        var str = a;
+        var len = str.length;
+        var count = [];
+        var result = []
+        var max = len - 1;
+        var all = 0;
+
+        for(var i= 0; i<= len; i++){
+            all += Math.pow(len , i);
+        }
+
+        var w = 0
+        for (var i = 0; i < all; i++) {
+            function addBySelf(x) {
+                if (x > max) return;
+                if (count[x] +1 > max) {
+                    count[x] = 0;
+                    addBySelf(x + 1);
+                } else {
+                    if (typeof count[x] !== 'number') {
+                        count[x] = 0;
+                    } else {
+                        count[x] += 1;
+                    }
+                    toStr();
+                }
+            };
+            addBySelf(w);
+        }
+
+        function toStr() {
+            var s = '';
+            count.forEach(function (item, key) {
+                s += str[item];
+            })
+            console.log(s);
+        }
+    }
+
+})(window, document, xy);

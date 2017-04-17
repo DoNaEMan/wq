@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
+    <title>Title</title>
+    <link rel="stylesheet" href="../src/css/common.css">
+    <script src="../src/js/flex.js"></script>
+    <style>
+        body,html{height:100%}
+
+    </style>
+</head>
+<body>
+<div class="iwrapper">
+    <div class="scroller">
+        <ul>
+            <li>
+                <div class="loop-container">
+                    <div class="loop-wrapper">
+                        <div class="loop-slider"
+                             style="background-image: url(http://img5.imgtn.bdimg.com/it/u=799054600,1077355333&fm=23&gp=0.jpg)"></div>
+                        <div class="loop-slider"
+                             style="background-image: url(http://img0.imgtn.bdimg.com/it/u=1551050401,367205609&fm=23&gp=0.jpg)"></div>
+                        <div class="loop-slider"
+                             style="background-image: url(http://img0.imgtn.bdimg.com/it/u=3190402118,19065868&fm=23&gp=0.jpg)"></div>
+                        <div class="loop-slider"
+                             style="background-image: url(http://img3.imgtn.bdimg.com/it/u=3572552329,4050955614&fm=23&gp=0.jpg)"></div>
+                    </div>
+                </div>
+            </li>
+        </ul>
+    </div>
+</div>
+
+<script src="../src/js/vue.js"></script>
+<script src="../src/js/common.js?11"></script>
+<script src="../src/js/touch-0.2.14.js"></script>
+<script src="../src/js/loop-img.js"></script>
+<script src="../src/js/iscroll-lite.js"></script>
+<script>
+
+    var loop = new LoopImg('.loop-container', {
+        autoPlay: true,
+        autoPlayTime: 3000,
+        pagination: true,
+        direction: '',
+        loop:true,
+        ease:{
+            style: 'cubic-bezier(0.25, 0.46, 0.45, 0.94)',
+            fn: function (k) {
+                return k * ( 2 - k );
+            }
+        }
+        //bezier:'cubic-bezier(0.175, 0.885, 0.32, 1.275)'
+    })
+
+    var count = 1;
+    var scroll = new IScroll(".iwrapper", {
+        refresh: true,
+        probeType: 2,
+        animateSpeed: 20,
+        animateBeginOffset: 30,
+        borderColor: '#0394fb',
+        borderBGColor: '#fff',
+        BGColor: '#e1e1e1',
+        tips: {
+            PULLDOWN1: "继续下拉可刷新",
+            PULLDOWN2: "松手开始刷新",
+            PULLDOWN3: "正在刷新中...",
+            PULLUP1: "继续上拉可加载",
+            PULLUP2: "松手开始加载",
+            PULLUP3: "正在加载中...",
+            PULLUPEND: '已经没有更多了'
+        },
+    });
+
+    scroll.on('pullDownRefresh', function () {
+        setTimeout(function () {
+            count =1;
+            scroll.pullDownOver();
+        }, 1000)
+    })
+    scroll.on('pullUpRefresh', function () {
+        setTimeout(function () {
+            if(count >=  10){
+                scroll.pullUpOver(true);
+            }else{
+                document.querySelector('ul').appendChild(xy.html('<li>'+count+'</li>'));
+                scroll.pullUpOver(false);
+            }
+            count ++;
+        }, 1000);
+    })
+
+</script>
+</body>
+</html>

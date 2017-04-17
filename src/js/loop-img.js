@@ -1,7 +1,7 @@
 /**
  * Created by wq on 2017/4/6.
  */
-(function(){
+(function () {
     function LoopImg(el, opts) {
         this.rootEl = typeof el === "string" ? document.querySelector(el) : el;
         this.wrapper = this.rootEl.querySelector('.loop-wrapper');
@@ -13,7 +13,12 @@
             autoPlay: false,
             loop: false,
             pagination: false,
-            bezier: 'cubic-bezier(0.25, 0.46, 0.45, 0.94)'
+            ease: {
+                style: 'cubic-bezier(0.25, 0.46, 0.45, 0.94)',
+                fn: function (k) {
+                    return k * ( 2 - k );
+                }
+            }
         }
 
         xy.utils.extend(this.options, opts);
@@ -21,6 +26,7 @@
         this.options.autoPlayTime = this.options.autoPlayTime < 3000 ? 3000 : this.options.autoPlayTime;
 
         this.x = 0;
+        this.y = 0;
         this.index = 0;
         this.animating = false;
 
@@ -35,12 +41,14 @@
             };
 
             this.style = {
-                transform: xy.utils.prefixStyle("transform"),
+                transform: xy.utils.prefixStyle('transform'),
                 transitionTimingFunction: xy.utils.prefixStyle('transitionTimingFunction'),
                 transitionDuration: xy.utils.prefixStyle('transitionDuration'),
                 transitionDelay: xy.utils.prefixStyle('transitionDelay'),
                 transformOrigin: xy.utils.prefixStyle('transformOrigin')
             }
+
+
 
             touch.on(this.wrapper, "dragstart", function (ev) {
                 if (_this.options.autoPlay) _this.play(false);
@@ -49,13 +57,11 @@
             });
 
             touch.on(this.wrapper, "drag", function (ev) {
-                ev.stopPropagation();
-                if (_this._overTthreshold(ev.angle)) return;
+
                 if (_this.animating) return;
                 if (new Date().getTime() - _this.startTime > 300) _this.startTime = new Date().getTime();
                 _this._drag.call(_this, ev);
             });
-
             touch.on(this.wrapper, "dragend", function (ev) {
                 if (_this.options.autoPlay) _this.play(true);
                 if (new Date().getTime() - _this.startTime < 300)
@@ -72,7 +78,6 @@
             addEvent(window, 'resize', this);
 
             this.resize();
-
 
             this.options.pagination && this._initPagination();
             this.options.autoPlay && this._autoPlay();
@@ -98,79 +103,205 @@
             //初始化参数和状态
             this.sliders = this.wrapper.querySelectorAll('.loop-slider');
             this.slidersNumb = this.sliders.length;
-            this.sliderLength = parseInt(this.rootEl.offsetWidth);
-            this.wrapperStyle.width = this.slidersNumb * this.sliderLength + "px";
-            this.maxSlideX = -this.sliderLength * (this.slidersNumb - 1);
-            this.x = -this.index * this.sliderLength;
+            this.sliderHeight = parseInt(this.rootEl.offsetHeight);
+            this.sliderWidth = parseInt(this.rootEl.offsetWidth);
 
             for (i = 0; i < this.slidersNumb; i++) {
-                this.sliders[i].style.width = this.sliderLength + "px";
+                this.sliders[i].style.width = this.sliderWidth + "px";
+                this.sliders[i].style.height = this.sliderHeight + "px";
+                //y 方向清除浮动
+                if (this.options.direction == 'y') {
+                    this.sliders[i].style.float = "none";
+                }
             }
 
-            this.wrapperStyle[this.style.transitionTimingFunction] = this.options.bezier;
+            if (this.options.direction == 'y') {
+                this.wrapperStyle.width = this.sliderWidth + "px";
+                this.wrapperStyle.height = this.slidersNumb * this.sliderHeight + "px";
+                this.maxSlideX = 0;
+                this.maxSlideY = -this.sliderHeight * (this.slidersNumb - 1);
+                this.y = -this.index * this.sliderHeight;
+            } else {
+                this.wrapperStyle.height = this.sliderHeight + "px";
+                this.wrapperStyle.width = this.slidersNumb * this.sliderWidth + "px";
+                this.maxSlideY = 0;
+                this.maxSlideX = -this.sliderWidth * (this.slidersNumb - 1);
+                this.x = -this.index * this.sliderWidth;
+            }
 
-            this.scrollTo(this.x, 0, 0);
-        },
-        _overTthreshold: function (angle) {
-            if (angle > 30 && angle < 150 || angle > -150 && angle < -30) return true;
-            return false;
+            this.wrapperStyle[this.style.transitionTimingFunction] = this.options.ease.style;
+
+            this.scrollTo(this.x, this.y);
         },
         _drag: function (ev) {
-            var x = ev.x, y = ev.y, absX = Math.abs(x);
-            if (absX >= this.sliderLength) x = x / absX * this.sliderLength;
-
-            if (this.style.transform) {
-                x = this.x + x > 0 ? x / 3 : this.x + x < this.maxSlideX ? x / 3 : x;
-                this.wrapperStyle[this.style.transform] = "translate(" + (this.x + x) + "px,0px) translateZ(0)";
+            var x = 0, y = 0, absX, absY;
+            if (this.options.direction == 'y') {
+                y = ev.y;
+                absY = Math.abs(y);
+                /*最多只能打拉动一个slider*/
+                if (absY >= this.sliderHeight) y = y / absY * this.sliderHeight;
+                y = this.y + y > 0 ? this.y + y / 3 : this.y + y < this.maxSlideY ? this.y + y / 3 : this.y + y;
             } else {
-                //TODO: solve no transform
+                x = ev.x;
+                absX = Math.abs(x);
+                if (absX >= this.sliderWidth) x = x / absX * this.sliderWidth;
+                x = this.x + x > 0 ? this.x + x / 3 : this.x + x < this.maxSlideX ? this.x + x / 3 : this.x + x;
             }
+
+            this._translate(x, y);
         },
 
         _dragEnd: function (ev) {
-            var x = ev.x, y = ev.y, absX = Math.abs(x);
-            if (absX >= this.sliderLength) x = x / absX * this.sliderLength;
-            this.x += x;
-            this.x = this.x > 0 ? 0 : this.x < this.maxSlideX ? this.maxSlideX : this.x;
-            this.index = Math.round(-this.x / this.sliderLength);
-            this.scrollTo(-this.index * this.sliderLength, 0, this.options.slideTime);
-        },
-        _swipeEnd: function (ev) {
-            if (ev.direction === "left") {
-                this.index = this.index === this.slidersNumb - 1 ? this.slidersNumb - 1 : this.index + 1;
-                this.scrollTo(-this.index * this.sliderLength, 0, this.options.slideTime);
+            var x = 0, y = 0, absX, absY;
+            if (this.options.direction == 'y') {
+                y = ev.y;
+                absY = Math.abs(y);
+                if (absY >= this.sliderHeight) y = y / absY * this.sliderHeight;
+                y = this.y + y;
+                this.y = y > 0 ? 0 : y < this.maxSlideY ? this.maxSlideY : y;
+                this.index = Math.round(-y / this.sliderHeight);
+                y = -this.index * this.sliderHeight;
             } else {
-                this.index = this.index === 0 ? 0 : this.index - 1;
-                this.scrollTo(-this.index * this.sliderLength, 0, this.options.slideTime);
+                x = ev.x;
+                absX = Math.abs(x);
+                if (absX >= this.sliderWidth) x = x / absX * this.sliderWidth;
+                x = this.x + x;
+                x = x > 0 ? 0 : x < this.maxSlideX ? this.maxSlideX : x;
+                this.index = Math.round(-x / this.sliderWidth);
+                x = -this.index * this.sliderWidth;
             }
+
+            this.scrollTo(x, y, this.options.slideTime);
+        },
+
+        _swipeEnd: function (ev) {
+            var x = 0, y = 0;
+            if (this.options.direction == 'y') {
+                if (ev.direction === "up") {
+                    this.index = this.index === this.slidersNumb - 1 ? this.slidersNumb - 1 : this.index + 1;
+                } else if (ev.direction === "down") {
+                    this.index = this.index === 0 ? 0 : this.index - 1;
+                }
+                y = -this.index * this.sliderHeight;
+            } else {
+                if (ev.direction === "left") {
+                    this.index = this.index === this.slidersNumb - 1 ? this.slidersNumb - 1 : this.index + 1;
+                } else if (ev.direction === "right") {
+                    this.index = this.index === 0 ? 0 : this.index - 1;
+                }
+                x = -this.index * this.sliderWidth;
+            }
+            this.scrollTo(x, y, this.options.slideTime);
         },
 
         scrollTo: function (x, y, time) {
             var _this = this;
             this.animating = true;
             this.x = x;
-            this.index = Math.round(-x / this.sliderLength);
-            this.wrapperStyle[this.style.transitionDuration] = time + "ms";
-            this.wrapperStyle[this.style.transform] = "translate(" + x + "px,0px) translateZ(0)";
+            this.y = y;
+            if (this.options.direction == 'y') {
+                this.index = Math.round(-y / this.sliderHeight);
+            } else {
+                this.index = Math.round(-x / this.sliderWidth);
+            }
+
+            if (this.style.transform) {
+                this.wrapperStyle[this.style.transitionDuration] = (time || 0) + "ms";
+                this._translate(x, y);
+            } else {
+                this._animate(x, y, time, this.options.ease.fn);
+            }
 
             setTimeout(function () {
                 _this._scrollEnd.call(_this);
             }, time)
         },
 
+        _animate: function (destX, destY, duration, easingFn) {
+            var that = this,
+                tmp = this.getComputedPosition(),
+                startX = tmp.x,
+                startY = tmp.y,
+                startTime = new Date().getTime(),
+                destTime = startTime + duration;
+
+            function step() {
+                var now = new Date().getTime(),
+                    newX, newY,
+                    easing;
+
+                if (now >= destTime) {
+
+                    that._translate(destX, destY);
+                    that.animating = false;
+
+                    return;
+                }
+
+                now = ( now - startTime ) / duration;
+                easing = easingFn(now);
+                newX = ( destX - startX ) * easing + startX;
+                newY = ( destY - startY ) * easing + startY;
+                that._translate(newX, newY);
+
+                if (that.isAnimating) {
+                    rAF(step);
+                }
+            }
+
+            this.isAnimating = true;
+            step();
+        },
+
+        getComputedPosition: function () {
+            var matrix = window.getComputedStyle(this.wrapper, null),
+                x, y;
+
+            if (this.style.transform) {
+                matrix = matrix[this.style.transform].split(')')[0].split(', ');
+                x = +(matrix[12] || matrix[4]);
+                y = +(matrix[13] || matrix[5]);
+            } else {
+                x = +matrix.left.replace(/[^-\d.]/g, '');
+                y = +matrix.top.replace(/[^-\d.]/g, '');
+            }
+
+            return {x: x, y: y};
+        },
+
+        _translate: function (x, y) {
+            if (this.options.direction == 'y') {
+                x = 0
+            } else {
+                y = 0
+            }
+            if (this.style.transform) {
+                this.wrapperStyle[this.style.transform] = 'translate(' + x + 'px,' + y + 'px) translateZ(0)';
+            } else {
+                x = Math.round(x);
+                y = Math.round(y);
+                this.wrapperStyle.left = x + 'px';
+                this.wrapperStyle.top = y + 'px';
+            }
+        },
+
         _scrollEnd: function () {
-            this.wrapperStyle[this.style.transitionDuration] = "0ms";
-            this.wrapperStyle[this.style.transform] = "translate(" + this.x + "px,0px) translateZ(0)";
             //无限自动播放
             if (this.options.loop && this.index === this.slidersNumb - 1) {
                 this.index = 1;
-                this.x = -this.sliderLength;
-                this.wrapperStyle[this.style.transform] = "translate(" + this.x + ",0px) translateZ(0)";
             } else if (this.options.loop && this.index === 0) {
                 this.index = this.slidersNumb - 2;
-                this.x = -this.index * this.sliderLength;
-                this.wrapperStyle[this.style.transform] = "translate(" + this.x + ",0px) translateZ(0)";
+
             }
+
+            if (this.options.direction == 'y') {
+                this.y = -this.index * this.sliderHeight;
+            } else {
+                this.x = -this.index * this.sliderWidth;
+            }
+
+            this.wrapperStyle[this.style.transitionDuration] = "";
+            this._translate(this.x, this.y);
             this.options.pagination && this._updatePaginationIndex();
             this.animating = false;
         },
@@ -181,10 +312,16 @@
                     if (!this.options.loop && this.index === this.slidersNumb - 1) {
                         this.index = 0;
                         this.x = 0;
+                        this.y = 0;
                         this.scrollTo(0, 0, this.options.slideTime);
                         this.timer = setTimeout(call, this.options.autoPlayTime);
                     } else {
-                        this._swipeEnd({direction: "left"});
+                        if(this.options.direction == 'y'){
+                            this._swipeEnd({direction: "up"});
+                        }else{
+                            this._swipeEnd({direction: "left"});
+                        }
+
                         this.timer = setTimeout(call, this.options.autoPlayTime);
                     }
                 },
