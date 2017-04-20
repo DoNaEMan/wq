@@ -4,7 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
 </head>
-
+<body>
+<div class="app"><div v-for="msg in a"><span v-for="(v, k) in msg">{{v}}</span></div></div>
+</body>
 <script>
     function a(){
         document.write(
@@ -42,6 +44,32 @@
         );
     }
 </script>
-<body onload="a()" >
-</body>
+<script src="../src/js/vue.js"></script>
+<script>
+
+
+        var test1 = {
+            count : 0,
+            ajax : function(cb){
+                this.count++;
+                var a = this.count
+                setTimeout(function(){
+                    a
+                    cb&&cb();
+                },2000);
+                return {id:this.count};
+            },
+            exec: function(){
+                var xhr;
+                var callback = function(){
+                    if(xhr.id === test1.count){
+                        alert(test1.count);
+                    }
+                }
+                xhr = test1.ajax(callback);
+            }
+        }
+
+
+</script>
 </html>
