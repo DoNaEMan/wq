@@ -57,7 +57,7 @@
                 pointerEvent;
         };
 
-        me.momentum = function (current, start, time, lowerMargin, wrapperSize, deceleration) {
+        me.momentum = function (current, start, time, lowerMargin, wrapperSize, deceleration,picker,snapDis) {
             var distance = current - start,
                 speed = Math.abs(distance) / time,
                 destination,
@@ -77,6 +77,13 @@
                 distance = Math.abs(current) + destination;
                 duration = distance / speed;
             }
+
+			if(picker){
+				return {
+					destination: Math.round(destination/snapDis)*snapDis,
+					duration: duration
+				}
+			}
 
             return {
                 destination: Math.round(destination),
@@ -365,6 +372,10 @@
             if(this.options.refresh){
                 this._pullRefreshInit();
             }
+
+			if(this.options.picker){
+				this._pickerInit();
+			}
 // INSERT POINT: _init
 
         },
@@ -606,7 +617,7 @@
                         destination: newX,
                         duration: 0
                     };
-                momentumY = this.hasVerticalScroll ? utils.momentum(this.y, this.startY, duration, this.maxScrollY, this.options.bounce ? this.wrapperHeight : 0, this.options.deceleration) : {
+                momentumY = this.hasVerticalScroll ? utils.momentum(this.y, this.startY, duration, this.maxScrollY, this.options.bounce ? this.wrapperHeight : 0, this.options.deceleration,this.options.picker,this.options.snapDis) : {
                         destination: newY,
                         duration: 0
                     };
@@ -1253,6 +1264,18 @@
         this.refresh(true, disablePullUpRefresh || false);
     }
 
+	IScroll.prototype._pickerInit=function(){
+		if(!this.options.picker) return;
+		this.options.render.call(this);
+		this.options.snapDis = this.wrapper.querySelector('li').offsetHeight;
+		this.options.startY = -(this.index||0)*this.options.snapDis;
+	}
+
+	IScroll.prototype.pickerRerender=function(){
+		if(!this.options.picker) return;
+		this._pickerInit();
+		this.refresh()
+	}
 
 
 })(window, document, Math);
