@@ -14,7 +14,8 @@
         .picker-wrappers { position: relative; height: 400px;}
         .picker-wrappers > div { position: relative; float: left; height: 100%; width: 100%; overflow: hidden; text-align: center;}
         .picker-scroll li { height: 80px; line-height: 80px; font-weight: 900; color: #5a5a5a; font-size: 36px; }
-        .picker-wrappers > div:after { display: block; content: ''; position: absolute; bottom: 160px; width: 100%; height: 80px !important; box-sizing: border-box; border: 1px solid #5a5a5a; border-left: none; border-right: none; }
+        .picker-wrappers > div:before { display: block; content: ''; position: absolute; top: 0; width: 100%; height: 160px !important; box-sizing: border-box; border-bottom: 1px solid #5a5a5a; background-color: rgba(0,0,0,.1);}
+        .picker-wrappers > div:after { display: block; content: ''; position: absolute; bottom: 0; width: 100%; height: 160px !important; box-sizing: border-box; border-top: 1px solid #5a5a5a; background-color: rgba(0,0,0,.1);}
         .picker-active { }
     </style>
 </head>
