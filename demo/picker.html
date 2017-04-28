@@ -313,7 +313,7 @@
 					//oLi.classList.add('picker-active');
 
 					//变更`日`数
-					if (this.options.type == 'time') {
+					if (this.options.type == 'time' && pickers.d) {
 						pickers.result[this.options.pos] = Number(oLi.dataset.value);
 						day = howManyDays(pickers.result.y, pickers.result.month)
 						if (day != pickers.days && this.options.type == 'time') {
@@ -385,7 +385,7 @@
 					this.$nextTick(function(){
 						pick = picker({
 							//每个子picker的唯一键名 ['y','month','d','h','m','s'],['0', '1', '2']
-							cols: ['y','month','d','h','m','s'],
+							cols: ['y','m','s'],
 							//类型 `time` `data`
 							type: 'time',
 							//联动 数据

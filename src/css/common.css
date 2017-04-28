@@ -28,7 +28,7 @@ a .img-content img { width: 100%; height: 100%; position: absolute; top: 0; left
 .pull-down canvas, .pull-up canvas{ height: 24px; width: 24px; position: absolute; left: 0; right: 0; top: 50%; margin-top: -12px;}
 @keyframes circle {
     from { -webkit-transform: rotate(0deg); -moz-transform: rotate(0deg); -ms-transform: rotate(0deg); -o-transform: rotate(0deg); transform: rotate(0deg); }
-    to { -webkit-transform: rotate(360deg); -moz-transform: rotate(360deg); -ms-transform: rotate(360deg); -o-transform: rotate(360deg); transform: rotate(360deg); rotate(360 deg); }
+    to { -webkit-transform: rotate(360deg); -moz-transform: rotate(360deg); -ms-transform: rotate(360deg); -o-transform: rotate(360deg); transform: rotate(360deg);}
     }
 .circle-ani { -webkit-animation: circle 1s linear infinite; -o-animation: circle 1s linear infinite; animation: circle 1s linear infinite; }
 
