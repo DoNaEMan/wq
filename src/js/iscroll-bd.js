@@ -1,12 +1,16 @@
-/*! iScroll v5.2.0 ~ (c) 2008-2016 Matteo Spinelli ~ http://cubiq.org/license */
+/**
+ * Created by wq on 2017/5/16.
+ */
 (function (window, document, Math, utils) {
-	function IScroll(el, options) {
-		this.wrapper = typeof el == 'string' ? document.querySelector(el) : el;
-		this.scroller = this.wrapper.children[0];
-		this.scrollerStyle = this.scroller.style;		// cache style for better performance
+	var BdScroll = function (el, options) {
+		this.wrapper = typeof el === 'string' ? document.querySelector(el) : el;
+		this.scroller = this.wrapper.querySelector('.bd-scroller');
+		this.upTips = this.wrapper.querySelector('#pullDown');
+		this.scrollerStyle = this.scroller.style;
+		this.upTipsStyle = this.upTips.style;
+		this.forTheMoment = 40;
 
 		this.options = {
-
 // INSERT POINT: OPTIONS
 			disablePointer: !utils.hasPointer,
 			disableTouch: utils.hasPointer || !utils.hasTouch,
@@ -27,7 +31,7 @@
 			HWCompositing: true,
 			useTransition: true,
 			useTransform: true,
-			bindToWrapper: typeof window.onmousedown === "undefined"
+			bindToWrapper: true/*typeof window.onmousedown === "undefined"*/
 		};
 
 		for (var i in options) {
@@ -39,6 +43,10 @@
 
 		this.options.useTransition = utils.hasTransition && this.options.useTransition;
 		this.options.useTransform = utils.hasTransform && this.options.useTransform;
+		if (!this.options.useTransform) {
+			this.scrollerStyle.position = 'absolute';
+			this.scrollerStyle.width = '100%';
+		}
 
 		this.options.eventPassthrough = this.options.eventPassthrough === true ? 'vertical' : this.options.eventPassthrough;
 		this.options.preventDefault = !this.options.eventPassthrough && this.options.preventDefault;
@@ -73,24 +81,15 @@
 		this._init();
 		this.refresh();
 
-		this.scrollTo(this.options.startX, this.options.startY);
-		this.enable();
+		//this.scrollTo(this.options.startX, this.options.startY);
 	}
 
-	IScroll.prototype = {
-		version: '5.2.0',
+	BdScroll.prototype = {
 
 		_init: function () {
 			this._initEvents();
-
-			if (this.options.refresh) {
-				this._pullRefreshInit();
-			}
-
-			if (this.options.picker) {
-				this._pickerInit();
-			}
 // INSERT POINT: _init
+			this._initIcon();
 
 		},
 
@@ -132,12 +131,8 @@
 				}
 			}
 
-			if (!this.enabled || (this.initiated && utils.eventType[e.type] !== this.initiated)) {
+			if ((this.initiated && utils.eventType[e.type] !== this.initiated)) {
 				return;
-			}
-
-			if (this.options.preventDefault && !utils.isBadAndroid && !utils.preventDefaultException(e.target, this.options.preventDefaultException)) {
-				e.preventDefault();
 			}
 
 			var point = e.touches ? e.touches[0] : e,
@@ -170,12 +165,14 @@
 			this.absStartY = this.y;
 			this.pointX = point.pageX;
 			this.pointY = point.pageY;
+			this.startPointY = point.pageY;
+			this.startPointX = point.pageX;
 
 			this._execEvent('beforeScrollStart');
 		},
 
 		_move: function (e) {
-			if (!this.enabled || utils.eventType[e.type] !== this.initiated) {
+			if (utils.eventType[e.type] !== this.initiated) {
 				return;
 			}
 
@@ -192,6 +189,8 @@
 
 			this.pointX = point.pageX;
 			this.pointY = point.pageY;
+			this.movePointY = point.pageY;
+			this.movePointX = point.pageX;
 
 			this.distX += deltaX;
 			this.distY += deltaY;
@@ -199,20 +198,9 @@
 			absDistY = Math.abs(this.distY);
 
 			// We need to move at least 10 pixels for the scrolling to initiate
-			if (timestamp - this.endTime > 300 && (absDistX < 10 && absDistY < 10)) {
-				return;
-			}
-
-			// If you are scrolling in one direction lock the other
-			if (!this.directionLocked && !this.options.freeScroll) {
-				if (absDistX > absDistY + this.options.directionLockThreshold) {
-					this.directionLocked = 'h';		// lock horizontally
-				} else if (absDistY >= absDistX + this.options.directionLockThreshold) {
-					this.directionLocked = 'v';		// lock vertically
-				} else {
-					this.directionLocked = 'n';		// no lock
-				}
-			}
+			/*if (timestamp - this.endTime > 300 && (absDistX < 10 && absDistY < 10)) {
+			 return;
+			 }*/
 
 			if (this.directionLocked == 'h') {
 				if (this.options.eventPassthrough == 'vertical') {
@@ -259,29 +247,20 @@
 
 			this._translate(newX, newY);
 
-			this._pullAction();
-
 			/* REPLACE START: _move */
 
-			if (timestamp - this.startTime > 300) {
-				this.startTime = timestamp;
-				this.startX = this.x;
-				this.startY = this.y;
-			}
 			if (this.options.probeType > 1) {
 				this._execEvent('scroll')
 			}
+
+			this.pullAction();
 			/* REPLACE END: _move */
 
 		},
 
 		_end: function (e) {
-			if (!this.enabled || utils.eventType[e.type] !== this.initiated) {
+			if (utils.eventType[e.type] !== this.initiated) {
 				return;
-			}
-
-			if (this.options.preventDefault && !utils.preventDefaultException(e.target, this.options.preventDefaultException)) {
-				e.preventDefault();
 			}
 
 			var point = e.changedTouches ? e.changedTouches[0] : e,
@@ -325,22 +304,6 @@
 				return;
 			}
 
-			// start momentum animation if needed
-			if (this.options.momentum && duration < 300) {
-				momentumX = this.hasHorizontalScroll ? utils.momentum(this.x, this.startX, duration, this.maxScrollX, this.options.bounce ? this.wrapperWidth : 0, this.options.deceleration) : {
-						destination: newX,
-						duration: 0
-					};
-				momentumY = this.hasVerticalScroll ? utils.momentum(this.y, this.startY, duration, this.maxScrollY, this.options.bounce ? this.wrapperHeight : 0, this.options.deceleration, this.options.picker, this.options.snapDis) : {
-						destination: newY,
-						duration: 0
-					};
-				newX = momentumX.destination;
-				newY = momentumY.destination;
-				time = Math.max(momentumX.duration, momentumY.duration);
-				this.isInTransition = 1;
-			}
-
 // INSERT POINT: _end
 
 			if (newX != this.x || newY != this.y) {
@@ -353,7 +316,7 @@
 				return;
 			}
 
-			this._execEvent('scrollEnd');
+			//this._execEvent('scrollEnd');
 		},
 
 		_resize: function () {
@@ -378,125 +341,230 @@
 				x = this.maxScrollX;
 			}
 
-			if (this.options.refresh) {
-				if (this.y > this.limitFloorY) {
-					if (this.pullDownRatio > 1 && !this.pullUpRefreshing) {
-						y = this.pullDownBoxHeight;
-						this._refreshCallBack();
-					} else {
-						y = this.limitFloorY;
-						this._clearProgressAnimation(2, this.options.bounceTime);
-					}
-				} else if (this.y < this.maxScrollY && !this.disablePullUpLoad) {
-					if (this.pullUpRatio > 1 && !this.pullDownRefreshing) {
-						y = this.maxScrollY - this.pullUpBoxHeight;
-						this._refreshCallBack();
-					} else {
-						y = this.maxScrollY;
-						this._clearProgressAnimation(1, this.options.bounceTime);
-					}
-				} else if (this.y < this.maxScrollY && this.disablePullUpLoad) {
-					y = this.maxScrollY;
-				}
-
-				if (x == this.x && y == this.y) {
-					return false;
-				}
-			} else {
-				if (!this.hasHorizontalScroll || this.x > 0) {
+			if (!this.hasHorizontalScroll || this.x > 0) {
+				if (x > this.forTheMoment && !this.downrefreshing) {
+					x = this.forTheMoment;
+					this.downrefreshing = true;
+					this.changePullTip('d3')
+					this._execEvent('pullDownRight');
+				} else if (!this.downrefreshing) {
 					x = 0;
-				} else if (this.x < this.maxScrollX) {
-					x = this.maxScrollX;
+				} else {
+					x = this.forTheMoment;
 				}
+			} else if (this.x < this.maxScrollX) {
+				x = this.maxScrollX;
+			}
 
-				if (!this.hasVerticalScroll || this.y > 0) {
+			if (!this.hasVerticalScroll || this.y > 0) {
+				if (y > this.forTheMoment && !this.downrefreshing) {
+					y = this.forTheMoment;
+					this.downrefreshing = true;
+					this.changePullTip('d3')
+					this._execEvent('pullDownRefresh');
+				} else if (!this.downrefreshing) {
 					y = 0;
-				} else if (this.y < this.maxScrollY) {
-					y = this.maxScrollY;
+				} else {
+					y = this.forTheMoment;
 				}
-				if (x == this.x && y == this.y) {
-					return false;
-				}
+			} else if (this.y < this.maxScrollY) {
+				y = this.maxScrollY;
+			}
+
+			if (x == this.x && y == this.y) {
+				return false;
 			}
 			this.scrollTo(x, y, time, this.options.bounceEasing);
 
 			return true;
 		},
 
-		disable: function () {
-			this.enabled = false;
-		},
+		_translate: function (x, y) {
 
-		enable: function () {
-			this.enabled = true;
-		},
-
-		refresh: function (bounceEase, disablePullUpRefresh) {
-			var rf = this.wrapper.offsetHeight;		// Force reflow
-			this.scroller.style.minHeight = this.wrapper.clientHeight + 'px';
-
-			this.wrapperWidth = this.wrapper.clientWidth;
-			this.wrapperHeight = this.wrapper.clientHeight;
-
-			/* REPLACE START: refresh */
-
-			this.scrollerWidth = this.scroller.offsetWidth;
-			this.scrollerHeight = this.scroller.offsetHeight;
-
-			this.maxScrollX = this.wrapperWidth - this.scrollerWidth;
-			this.maxScrollY = this.wrapperHeight - this.scrollerHeight;
-
-			/* REPLACE END: refresh */
-
-			this.hasHorizontalScroll = this.options.scrollX && this.maxScrollX <= 0;
-			this.hasVerticalScroll = this.options.scrollY && this.maxScrollY <= 0;
-
-			if (!this.hasHorizontalScroll) {
-				this.maxScrollX = 0;
-				this.scrollerWidth = this.wrapperWidth;
+			if (this.options.scrollY) {
+				x = 0;
+				//禁止默认
+				if (document.body.scrollTop === 0 && this.y >= 0) {
+					this.options.preventDefault = true;
+					//容许默认
+				} else {
+					y = 0;
+					this.options.preventDefault = false;
+				}
+				if (y <= 0) {
+					y = 0;
+				}
+				//方向up,容许默认
+				if (this.movePointY < this.startPointY) {
+					this.options.preventDefault = false;
+				}
+				if (this.downrefreshing) {
+					y = 40;
+				}
+			} else {
+				y = 0;
+				if (document.body.scrollLeft === 0 && this.x >= 0) {
+					this.options.preventDefault = true;
+				} else {
+					x = 0;
+					this.options.preventDefault = false;
+				}
+				if (x <= 0) {
+					x = 0;
+				}
+				if (this.movePointX < this.startPointX) {
+					this.options.preventDefault = false;
+				}
+				if (this.downrefreshing) {
+					x = 40;
+				}
 			}
 
-			if (!this.hasVerticalScroll) {
-				this.maxScrollY = 0;
-				this.scrollerHeight = this.wrapperHeight;
+			if (this.options.useTransform) {
+
+				/* REPLACE START: _translate */
+				this.scrollerStyle[utils.style.transform] = 'translate(' + x + 'px,' + y + 'px)' + this.translateZ;
+				/* REPLACE END: _translate */
+
+			} else {
+				x = Math.round(x);
+				y = Math.round(y);
+				this.scrollerStyle.left = x + 'px';
+				this.scrollerStyle.top = y + 'px';
 			}
+
+			this.x = x;
+			this.y = y;
+
+// INSERT POINT: _translate
+
+		},
+
+		_initIcon: function () {
+			var d = this.wrapper.querySelector('#pullDown .pullDownIcon');
+			var u = this.wrapper.querySelector('#pullUp .pullUpIcon');
+			u.innerHTML = d.innerHTML = '<canvas height="100" width="100" style="width:100%;height:100%;position: absolute;top:0;left:0"></canvas>';
+			this.dc = this.wrapper.querySelector('#pullDown canvas');
+			this.uc = this.wrapper.querySelector('#pullUp canvas');
+			this.d = this.wrapper.querySelector('#pullDown .pullDownLabel');
+			this.u = this.wrapper.querySelector('#pullUp .pullUpLabel');
+			if (this.d.getContext) {
+				this.noCanvs = true;
+			} else {
+				this.dcc = this.dc.getContext('2d');
+				this.ucc = this.uc.getContext('2d');
+			}
+			this.p = (Math.PI * 2) / 360;
+		},
+
+		pullAction: function () {
+			this.draw(1, this.y / 40 * 100);
+			if (this.downrefreshing) {
+				this.changePullTip('d3');
+				this.options.preventDefault = false;
+			} else {
+				if (this.y <= this.forTheMoment) {
+					this.changePullTip('d1')
+				} else {
+					this.changePullTip('d2')
+				}
+			}
+		},
+
+		draw: function (direction, rate) {
+			if (this.draw.ing && this.noCanvs) return
+			this.draw.ing = true;
+			var p = this.p;
+			var c = null;
+			var _this = this;
+			if (direction === 1) {
+				c = this.dcc;
+			} else {
+				c = this.ucc;
+			}
+			rAF(function () {
+				rate = rate >= 100 ? 100 : rate <= 0 ? 0 : rate;
+				c.beginPath();
+				c.clearRect(0, 0, 100, 100);
+				c.strokeStyle = '#ffffff';
+				c.lineWidth = 12;
+				c.arc(50, 50, 43, 0, 360 * p, false);
+				c.stroke();
+				c.beginPath();
+				c.strokeStyle = '#0394fb';
+				c.lineWidth = 12;
+				c.arc(50, 50, 43, -80 * p, (3.4 * rate - 80) * p, false);
+				c.stroke();
+				_this.draw.ing = false;
+			})
+		},
+
+		changePullTip: function (type) {
+			var d = this.d;
+			var u = this.u;
+			var dc = this.dc;
+			var uc = this.uc;
+			switch (type) {
+				case 'd1':
+					d.innerHTML = '继续下拉刷新';
+					utils.removeClass(dc, 'circle-ani');
+					break;
+				case 'd2':
+					d.innerHTML = '松手即可刷新';
+					break;
+				case 'd3':
+					d.innerHTML = '正在刷新中...';
+					utils.addClass(dc, 'circle-ani');
+					break;
+				case 'u1':
+					u.innerHTML = '上拉加载更多';
+					utils.removeClass(uc, 'circle-ani');
+					break;
+				case 'u2':
+					u.innerHTML = '松手即可加载';
+					break;
+				case 'u3':
+					u.innerHTML = '正在加载中...';
+					utils.addClass(uc, 'circle-ani');
+					break;
+				case 'u4':
+					u.innerHTML = '全部加载完毕';
+					utils.removeClass(uc, 'circle-ani');
+					this.draw(2, 0);
+					break;
+
+			}
+			return this;
+		},
+
+		refresh: function (nomore) {
+			this.hasHorizontalScroll = this.options.scrollX
+			this.hasVerticalScroll = this.options.scrollY
+
+			this.maxScrollTop = document.body.offsetHeight;
+			this.maxScrollLeft = document.body.offsetWidth;
+
+			this.maxScrollY = 0;
+			this.maxScrollX = 0;
 
 			this.endTime = 0;
 			this.directionX = 0;
 			this.directionY = 0;
 
-			this.wrapperOffset = utils.offset(this.wrapper);
-
 			this._execEvent('refresh');
-			if (this.options.refresh && bounceEase) {
-				this.pullDownRatio = 0;
-				this.pullUpRatio = 0;
-				this.pullRefreshType = '';
-				this.pullDownRefreshing = false;
-				this.pullUpRefreshing = false;
-				this.pullDownTipBox.innerText = this.options.tips.PULLDOWN1;
-				this.pullUpTipBox.innerText = this.options.tips.PULLUP1;
-				this._clearProgressAnimation();
-			}
-			if (this.options.refresh) {
-				if (disablePullUpRefresh === true) {
-					//禁用下拉
-					this.disablePullUp(true);
-				} else if (disablePullUpRefresh === false) {
-					//开启下拉
-					this.disablePullUp(false);
-				} else {
-					//不更新下拉下拉状态，只改变滑动数据
-					this.disablePullUp();
-				}
-			}
-
-			if (bounceEase) {
+			if (this.downrefreshing) {
+				this.downrefreshing = false;
 				this.resetPosition(this.options.bounceTime);
+			} else if (this.uprefreshing) {
+				this.uprefreshing = true;
 			} else {
 				this.resetPosition();
 			}
 
+			if (nomore) {
+				this.uprefreshing = true;
+				this.changePullTip('u4');
+			}
 // INSERT POINT: _refresh
 
 		},
@@ -618,29 +686,6 @@
 			this.scrollerStyle[utils.style.transitionTimingFunction] = easing;
 
 // INSERT POINT: _transitionTimingFunction
-
-		},
-
-		_translate: function (x, y) {
-			if (this.options.useTransform) {
-
-				/* REPLACE START: _translate */
-
-				this.scrollerStyle[utils.style.transform] = 'translate(' + x + 'px,' + y + 'px)' + this.translateZ;
-
-				/* REPLACE END: _translate */
-
-			} else {
-				x = Math.round(x);
-				y = Math.round(y);
-				this.scrollerStyle.left = x + 'px';
-				this.scrollerStyle.top = y + 'px';
-			}
-
-			this.x = x;
-			this.y = y;
-
-// INSERT POINT: _translate
 
 		},
 
@@ -769,235 +814,18 @@
 					this._transitionEnd(e);
 					break;
 				case 'click':
-					if (this.enabled && !e._constructed) {
+					if (!e._constructed) {
 						e.preventDefault();
 						e.stopPropagation();
 					}
 					break;
 			}
 		}
-	};
-	IScroll.utils = utils;
-
-	if (typeof module != 'undefined' && module.exports) {
-		module.exports = IScroll;
-	} else if (typeof define == 'function' && define.amd) {
-		define(function () {
-			return IScroll;
-		});
-	} else {
-		window.IScroll = IScroll;
-	}
-
-
-	/*this plus by wq 2017.4.10*/
-
-	IScroll.prototype._pullRefreshInit = function () {
-		var pullUpBox,
-			pullDownBox,
-			div = document.createElement('div');
-
-		div.innerHTML = '<div class="pull-up"><div class="wrap"><canvas height="100" width="100"></canvas><div class="tips"></div></div></div>';
-		pullUpBox = div.children[0];
-		div.innerHTML = '<div class="pull-down"><div class="wrap"><canvas height="100" width="100"></canvas><div class="tips"></div></div></div>';
-		pullDownBox = div.children[0];
-
-		div = null;
-
-		if (!this.wrapper.querySelector('.pull-down')) {
-			this.scroller.insertBefore(pullDownBox, this.scroller.children[0]);
-		}
-		if (!this.wrapper.querySelector('.pull-up')) {
-			this.scroller.appendChild(pullUpBox);
-		}
-
-		this.limitFloorY = 0;
-		this.pullDownTipBox = pullDownBox.querySelector('.tips');
-		this.pullUpTipBox = pullUpBox.querySelector('.tips');
-		this.pullDownBoxHeight = pullDownBox.offsetHeight;
-		this.pullUpBoxHeight = pullUpBox.offsetHeight;
-		this.pullDownCanvas = pullDownBox.querySelector('canvas');
-		this.pullUpCanvas = pullUpBox.querySelector('canvas');
-		this.pullDownTipBox.innerHTML = this.options.tips.PULLDOWN1;
-		this.pullUpTipBox.innerHTML = this.options.tips.PULLUP1;
-		this.scroller.style.minHeight = this.wrapper.clientHeight + 'px';
-
-	}
-	//拉动动作
-	IScroll.prototype._pullAction = function () {
-		if (!this.options.refresh) return;
-		if (this.y > this.limitFloorY && !this.pullUpRefreshing && !this.pullDownRefreshing) {
-			if (this.y - this.limitFloorY < this.options.animateBeginOffset) return;
-			this.pullRefreshType = 'pulldown';
-			this.pullDownRatio = (this.y - this.limitFloorY - this.options.animateBeginOffset) / this.options.animateSpeed;
-			this._pullRefreshAnimate();
-		} else if (this.y < this.maxScrollY && !this.pullDownRefreshing && !this.pullUpRefreshing && !this.disablePullUpLoad) {
-			if (this.maxScrollY - this.y < this.options.animateBeginOffset) return;
-			this.pullRefreshType = 'pullup';
-			this.pullUpRatio = (this.maxScrollY - this.y - this.options.animateBeginOffset) / this.options.animateSpeed;
-			this._pullRefreshAnimate();
-		}
-	}
-	//拉动回调
-	IScroll.prototype._refreshCallBack = function () {
-		if (this.pullUpRefreshing || this.pullDownRefreshing) return;
-		if (this.pullRefreshType === 'pulldown') {
-			this._startTurnRound(1);
-			this.pullDownRefreshing = true;
-			this.pullDownTipBox.innerText = this.options.tips.PULLDOWN3;
-			this._execEvent('pullDownRefresh');
-		} else if (this.pullRefreshType === 'pullup') {
-			this._startTurnRound(2);
-			this.pullUpRefreshing = true;
-			this.pullUpTipBox.innerText = this.options.tips.PULLUP3;
-			this._execEvent('pullUpRefresh');
-		}
-	}
-
-	//拉动动画
-	IScroll.prototype._pullRefreshAnimate = function () {
-		var _this = this;
-		if (this.pullRefreshType === 'pulldown' && !this.pullDownRefreshing && !this.pullUpRefreshing) {
-			rAF(function () {
-				_this._progressAnimation(parseInt(_this.pullDownRatio * 100), 1);
-			})
-			if (this.pullDownRatio > 1) {
-				this.pullDownTipBox.innerText = this.options.tips.PULLDOWN2;
-			} else {
-				this.pullDownTipBox.innerText = this.options.tips.PULLDOWN1;
-			}
-		} else if (this.pullRefreshType === 'pullup' && !this.pullDownRefreshing && !this.pullUpRefreshing) {
-			rAF(function () {
-				_this._progressAnimation(parseInt(_this.pullUpRatio * 100), 2);
-			})
-			if (this.pullUpRatio > 1) {
-				this.pullUpTipBox.innerText = this.options.tips.PULLUP2;
-			} else {
-				this.pullUpTipBox.innerText = this.options.tips.PULLUP1;
-			}
-		}
-
-	}
-	IScroll.prototype._progressAnimation = function (rate, direction) {
-		if (this.pullUpRefreshing || this.pullDownRefreshing) return;
-		var canvas, p = (Math.PI * 2) / 360, context;
-		if (direction === 1) {
-			canvas = this.pullDownCanvas
-		} else {
-			canvas = this.pullUpCanvas
-		}
-		rate = rate >= 100 ? 100 : rate <= 0 ? 0 : rate;
-		if (canvas.getContext) {
-			context = canvas.getContext("2d");
-			context.beginPath();
-			context.clearRect(0, 0, 100, 100);
-			context.strokeStyle = this.options.borderColor;
-			context.lineWidth = 12;
-			context.arc(50, 50, 43, -80 * p, (3.4 * rate - 80) * p, false);
-			context.stroke();
-		}
-		this.lastPullRate = rate;
-	}
-	IScroll.prototype._startTurnRound = function (direction) {
-		if (this.pullUpRefreshing || this.pullDownRefreshing) return;
-		if (direction === 2) {
-			this.wrapper.querySelector('.pull-up canvas').classList.add('circle-ani');
-		} else if (direction === 1) {
-			this.wrapper.querySelector('.pull-down canvas').classList.add('circle-ani');
-		}
-	}
-	IScroll.prototype._endTurnRound = function (direction) {
-		if (this.pullUpRefreshing || this.pullDownRefreshing) return;
-		if (direction === 2) {
-			this._progressAnimation(0, 2);
-			this.wrapper.querySelector('.pull-up canvas').classList.remove('circle-ani');
-		} else if (direction === 1) {
-			this._progressAnimation(0, 1);
-			this.wrapper.querySelector('.pull-down canvas').classList.remove('circle-ani');
-		}
-
-	}
-	IScroll.prototype._clearProgressAnimation = function (direction, time) {
-		if (this.pullUpRefreshing || this.pullDownRefreshing) return;
-		var _this = this;
-		setTimeout(function () {
-			_this._endTurnRound(1);
-			_this._endTurnRound(2);
-		}, 50);
-	}
-
-	IScroll.prototype.triggerPullDown = function () {
-		this.pullDownRatio = 10;
-		this.pullRefreshType = 'pulldown';
-		this._progressAnimation(100, 1);
-		this.y = 1;
-		this.resetPosition(this.options.bounceTime);
-	}
-	/**
-	 * 禁止和开启上拉加载,并计算动画元素放置位置
-	 * @param bl {boolean} 是否禁用上拉加载
-	 */
-	IScroll.prototype.disablePullUp = function (bl) {
-		var contentHeight, pullUpBoxStyle;
-		if (typeof bl === "boolean") {
-			this.disablePullUpLoad = bl
-		} else {
-			bl = this.disablePullUpLoad;
-		}
-
-		pullUpBoxStyle = this.wrapper.querySelector('.pull-up').style;
-
-		if (bl) {
-			contentHeight = this.scroller.children[1].offsetHeight;
-			if (contentHeight <= this.scrollerHeight - this.pullUpBoxHeight) {
-				pullUpBoxStyle.bottom = this.scrollerHeight - contentHeight - this.pullDownBoxHeight + 'px';
-			} else if (contentHeight > this.scrollerHeight - this.pullUpBoxHeight &&
-				contentHeight < this.scrollerHeight + this.pullUpBoxHeight) {
-				this.maxScrollY -= (contentHeight + this.pullUpBoxHeight - this.scrollerHeight);
-				pullUpBoxStyle.bottom = -(contentHeight + this.pullUpBoxHeight - this.scrollerHeight) + 'px';
-			} else {
-				pullUpBoxStyle.bottom = -this.pullUpBoxHeight + 'px';
-			}
-			this.pullUpTipBox.innerHTML = this.options.tips.PULLUPEND;
-		} else {
-			pullUpBoxStyle.bottom = -this.pullUpBoxHeight + 'px';
-		}
-	}
-	/**
-	 * 下拉刷新结束时调用：更新数据并开启上拉加载
-	 * @param disablePullUpRefresh {boolean} 默认false 不禁用上拉加载
-	 */
-	IScroll.prototype.pullDownOver = function (disablePullUpRefresh) {
-		this.refresh(true, disablePullUpRefresh || false);
-	}
-	/**
-	 * 上拉加载结束时调用：更新数据并是否禁用上拉加载
-	 * @param disablePullUpRefresh {boolean} 是否禁用上拉加载
-	 */
-	IScroll.prototype.pullUpOver = function (disablePullUpRefresh) {
-		this.refresh(true, disablePullUpRefresh || false);
-	}
-
-	IScroll.prototype._pickerInit = function () {
-		if (!this.options.picker) return;
-		this.options.render.call(this);
-		this.options.snapDis = this.wrapper.querySelector('li').offsetHeight;
-		this.options.startY = -(this.index || 0) * this.options.snapDis;
-	}
-
-	IScroll.prototype.pickerRerender = function () {
-		if (!this.options.picker) return;
-		this._pickerInit();
-		this.refresh()
 	}
 
 	if (typeof module != 'undefined' && module.exports) {
-		module.exports = IScroll;
+		module.exports = BdScroll;
 	} else {
-		window.IScroll = IScroll;
+		window.BdScroll = BdScroll;
 	}
-
 })(window, document, Math, utils);
-
-
-

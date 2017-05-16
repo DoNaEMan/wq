@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <title>Title</title>
+    <script src="../src/js/flex.js"></script>
+    <link rel="stylesheet" href="../src/css/base.css"/>
+    <style>
+        body { margin-top: -40px; }
+        header { height: 1.28rem; background: #dd524d; overflow: hidden; position: fixed; top: 0; z-index: 100 }
+        li { height: 1.5rem; background: #007AFF }
+        li:nth-child(2n) { background: #d8d8d8 }
+        #wrapper { position: relative; margin-top: 1.28rem; width: 100%; z-index: 10; max-width: 750px; }
+        /*上拉和下拉样式*/
+        .pullUp_box { height: 40px; line-height: 40px; text-align: center; margin: 0 auto; width: auto;position: relative }
+        .pullDownIcon,.pullUpIcon {height: 20px; width: 20px; position:absolute; top: 10px;margin-left: -25px;}
+        #pullUp, #pullDown { height: 40px; line-height: 40px; font-size: .24rem; color: #999; }
+        @keyframes circle {
+            from { -webkit-transform: rotate(0deg); -moz-transform: rotate(0deg); -ms-transform: rotate(0deg); -o-transform: rotate(0deg); transform: rotate(0deg); }
+            to { -webkit-transform: rotate(360deg); -moz-transform: rotate(360deg); -ms-transform: rotate(360deg); -o-transform: rotate(360deg); transform: rotate(360deg); }
+        }
+        .circle-ani { -webkit-animation: circle 1s linear infinite; -o-animation: circle 1s linear infinite; animation: circle 1s linear infinite; }
+    </style>
+</head>
+<body>
+<header>
+    <p>内存泄漏是指计算机可用内存的逐渐减少。当程序持续无法释放其使用的临时内存时就会发生。JavaScript的web应用也会经常遇到在原生应用程序中出现的内存相关的问题，如泄漏和溢出，web应用也需要应对垃圾回收停顿。</p>
+</header>
+<div id="wrapper">
+    <div class="bd-scroller">
+        <div id="pullDown">
+            <div class="pullUp_box">
+                <span class="pullDownIcon"></span><span class="pullDownLabel">下拉刷新...</span>
+            </div>
+        </div>
+        <li><input type="text"></li>
+        <li class="hh">123131231</li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+    </div>
+    <div id="pullUp">
+        <div class="pullUp_box">
+            <span class="pullUpIcon"></span><span class="pullUpLabel">上拉显示更多</span>
+        </div>
+    </div>
+</div>
+</body>
+<script src="../src/js/common.js"></script>
+<script src="../src/js/iscroll-utils.js"></script>
+<script src="../src/js/iscroll-bd.js"></script>
+<script>
+	document.querySelector('.hh').addEventListener('click', function (e) {
+		alert('你点击了');
+	}, false);
+
+
+	var a = new BdScroll('#wrapper', {
+		scrollY: true,
+		scrollX: false
+	});
+
+	a.on('pullDownRefresh', function () {
+		setTimeout(function () {
+			a.refresh();
+		}, 5000);
+	})
+
+	var delta = window.innerHeight;
+	window.addEventListener('scroll', function () {
+		if (document.body.scrollTop > a.maxScrollTop - delta && !a.uprefreshing && !a.downrefreshing) {
+			a.changePullTip('u3');
+			a.uprefreshing = true;
+			a.draw(2,100);
+            setTimeout(function () {
+				a.refresh(true);
+			}, 5000);
+		}
+	}, false);
+
+</script>
+</html>
