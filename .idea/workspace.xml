@@ -2,13 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="f42f644b-dadd-4fe3-b3bf-fe2e5f693a7a" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/demo/BdScroll.html" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/js/iscroll-bd.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/demo/iscrollRefresh.html" afterPath="$PROJECT_DIR$/demo/iscrollRefresh.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/demo/picker.html" afterPath="$PROJECT_DIR$/demo/picker.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/demo/testSize.html" afterPath="$PROJECT_DIR$/demo/testSize.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/js/iscroll-lite.js" afterPath="$PROJECT_DIR$/src/js/iscroll-lite.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/demo/BdScroll.html" afterPath="$PROJECT_DIR$/demo/BdScroll.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dist/js/iscroll-lite.js" afterPath="$PROJECT_DIR$/dist/js/iscroll-lite.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/js/iscroll-bd.js" afterPath="$PROJECT_DIR$/src/js/iscroll-bd.js" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
@@ -29,22 +26,24 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="BdScroll.html" pinned="false" current-in-tab="true">
+      <file leaf-file-name="BdScroll.html" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/demo/BdScroll.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="395">
-              <caret line="71" column="36" lean-forward="false" selection-start-line="71" selection-start-column="36" selection-end-line="71" selection-end-column="36" />
+            <state relative-caret-position="272">
+              <caret line="15" column="31" lean-forward="false" selection-start-line="15" selection-start-column="31" selection-end-line="15" selection-end-column="31" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="common.css" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/css/common.css">
+      <file leaf-file-name="iscroll-bd.js" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/js/iscroll-bd.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-727">
-              <caret line="27" column="131" lean-forward="true" selection-start-line="27" selection-start-column="131" selection-end-line="27" selection-end-column="131" />
-              <folding />
+            <state relative-caret-position="140">
+              <caret line="296" column="26" lean-forward="true" selection-start-line="296" selection-start-column="26" selection-end-line="296" selection-end-column="26" />
+              <folding>
+                <marker date="1495099207000" expanded="true" signature="6104:6158" ph="..." />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -52,53 +51,29 @@
       <file leaf-file-name="iscroll-lite.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/js/iscroll-lite.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="17">
-              <caret line="1" column="43" lean-forward="false" selection-start-line="1" selection-start-column="43" selection-end-line="1" selection-end-column="43" />
+            <state relative-caret-position="963">
+              <caret line="181" column="46" lean-forward="true" selection-start-line="181" selection-start-column="46" selection-end-line="181" selection-end-column="46" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="iscroll-utils.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/js/iscroll-utils.js">
+      <file leaf-file-name="base.css" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/css/base.css">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="102">
-              <caret line="8" column="25" lean-forward="true" selection-start-line="8" selection-start-column="25" selection-end-line="8" selection-end-column="25" />
-              <folding>
-                <element signature="e#0#38#0" expanded="false" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="iscroll-probe.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/js/iscroll-probe.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="41633">
-              <caret line="2425" column="4" lean-forward="false" selection-start-line="2425" selection-start-column="4" selection-end-line="2425" selection-end-column="4" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="picker.html" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/demo/picker.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="72">
-              <caret line="20" column="7" lean-forward="true" selection-start-line="20" selection-start-column="7" selection-end-line="20" selection-end-column="7" />
+            <state relative-caret-position="285">
+              <caret line="1510" column="37" lean-forward="false" selection-start-line="1510" selection-start-column="29" selection-end-line="1510" selection-end-column="37" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
       <file leaf-file-name="iscroll-bd.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/js/iscroll-bd.js">
+        <entry file="file://$PROJECT_DIR$/dist/js/iscroll-bd.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="51">
-              <caret line="3" column="34" lean-forward="false" selection-start-line="3" selection-start-column="34" selection-end-line="3" selection-end-column="34" />
-              <folding>
-                <marker date="1494915546000" expanded="true" signature="11387:11441" ph="..." />
-              </folding>
+            <state relative-caret-position="0">
+              <caret line="0" column="3473" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="9407" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -115,26 +90,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>getPosition</find>
-      <find>this.style.useTransform</find>
-      <find>_scrollEnd</find>
-      <find>sliderLength</find>
-      <find>_move:</find>
-      <find>_overTthreshold</find>
-      <find>_animate</find>
-      <find>_translateEnd</find>
-      <find>Object.prototype.toString</find>
-      <find>ready</find>
-      <find>hasPointer</find>
-      <find>scrollStyle</find>
-      <find>scrollerStyle</find>
-      <find>wrapper</find>
-      <find>bindToWrapper</find>
-      <find>useTransform</find>
-      <find>refresh</find>
-      <find>flick</find>
-      <find>enabled</find>
-      <find>enable</find>
       <find>refreshing</find>
       <find>scrollEnd</find>
       <find>context</find>
@@ -142,9 +97,29 @@
       <find>.querySelector('')</find>
       <find>.querySelector</find>
       <find>move</find>
-      <find>_move</find>
       <find>rAF</find>
       <find>IScroll</find>
+      <find>_</find>
+      <find>bounceTime</find>
+      <find>_lock</find>
+      <find>x</find>
+      <find>X</find>
+      <find>enable</find>
+      <find>forTheMoment</find>
+      <find>resetPosition</find>
+      <find>u4</find>
+      <find>scrollTo</find>
+      <find>u2</find>
+      <find>isInTransition</find>
+      <find>isAnimating</find>
+      <find>_scroll</find>
+      <find>preventDefaultException</find>
+      <find>_animate</find>
+      <find>_move</find>
+      <find>scrollBy</find>
+      <find>preventDefault</find>
+      <find>loading</find>
+      <find>refresh</find>
     </findStrings>
     <replaceStrings>
       <replace>xy.html</replace>
@@ -155,6 +130,8 @@
       <replace>sliderWidth</replace>
       <replace>_progressAnimation</replace>
       <replace>c</replace>
+      <replace>_locked</replace>
+      <replace>_scrollTo</replace>
     </replaceStrings>
   </component>
   <component name="Git.Settings">
@@ -169,12 +146,12 @@
     <setting file="file://$PROJECT_DIR$/src/js/common.js" root0="SKIP_INSPECTION" />
     <setting file="file://$PROJECT_DIR$/src/js/iscroll-probe.js" root0="SKIP_INSPECTION" />
     <setting file="file://$PROJECT_DIR$/demo/index.html" root0="SKIP_INSPECTION" />
-    <setting file="file://$PROJECT_DIR$/demo/picker.html" root0="SKIP_INSPECTION" />
     <setting file="file://$PROJECT_DIR$/demo/BdScroll.html" root0="SKIP_INSPECTION" />
+    <setting file="file://$PROJECT_DIR$/src/js/iscroll-bd.js" root0="SKIP_INSPECTION" />
+    <setting file="file://$PROJECT_DIR$/demo/picker.html" root0="SKIP_INSPECTION" />
     <setting file="file://$PROJECT_DIR$/demo/testSize.html" root0="SKIP_INSPECTION" />
     <setting file="file://$PROJECT_DIR$/demo/iscrollRefresh.html" root0="SKIP_INSPECTION" />
     <setting file="file://$PROJECT_DIR$/src/js/iscroll-lite.js" root0="SKIP_INSPECTION" />
-    <setting file="file://$PROJECT_DIR$/src/js/iscroll-bd.js" root0="SKIP_INSPECTION" />
     <setting file="file://$PROJECT_DIR$/dist/js/picker.js" root0="SKIP_INSPECTION" />
     <setting file="file://$PROJECT_DIR$/mui/js/mui.js" root0="SKIP_INSPECTION" />
   </component>
@@ -188,7 +165,6 @@
         <option value="$PROJECT_DIR$/src/js/scroll-core.js" />
         <option value="$PROJECT_DIR$/node_modules/iscroll/demos/carousel/index.html" />
         <option value="$PROJECT_DIR$/node_modules/iscroll/demos/event-passthrough/index.html" />
-        <option value="$PROJECT_DIR$/src/js/iscroll-probe.js" />
         <option value="$PROJECT_DIR$/src/js/loop-img.js" />
         <option value="$PROJECT_DIR$/.gitignore" />
         <option value="$PROJECT_DIR$/demo/iscrollAndLoopImg.html" />
@@ -207,11 +183,12 @@
         <option value="$PROJECT_DIR$/demo/iscrollRefresh.html" />
         <option value="$PROJECT_DIR$/src/css/base.css" />
         <option value="$PROJECT_DIR$/src/js/iscroll-bd.html" />
-        <option value="$PROJECT_DIR$/src/js/iscroll-lite.js" />
-        <option value="$PROJECT_DIR$/src/js/iscroll-bd.js" />
         <option value="$PROJECT_DIR$/src/js/iscroll-utils.js" />
-        <option value="$PROJECT_DIR$/demo/BdScroll.html" />
         <option value="$PROJECT_DIR$/demo/picker.html" />
+        <option value="$PROJECT_DIR$/src/js/iscroll-lite.js" />
+        <option value="$PROJECT_DIR$/src/js/iscroll-probe.js" />
+        <option value="$PROJECT_DIR$/src/js/iscroll-bd.js" />
+        <option value="$PROJECT_DIR$/demo/BdScroll.html" />
       </list>
     </option>
   </component>
@@ -259,7 +236,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -272,73 +248,10 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="wq" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="wq" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="js" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="wq" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="wq" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="wq" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="wq" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="css" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="wq" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="wq" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="demo" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
         </subPane>
       </pane>
       <pane id="Scratches" />
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -491,6 +404,7 @@
       <workItem from="1494757975176" duration="5132000" />
       <workItem from="1494810525883" duration="16531000" />
       <workItem from="1494897219902" duration="13121000" />
+      <workItem from="1495073478207" duration="19124000" />
     </task>
     <task id="LOCAL-00001" summary="add some">
       <created>1491537381121</created>
@@ -580,25 +494,25 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="141368000" />
+    <option name="totallyTimeSpent" value="160492000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="51" y="23" width="1315" height="745" extended-state="6" />
+    <frame x="51" y="23" width="1315" height="745" extended-state="0" />
     <editor active="false" />
     <layout>
       <window_info id="Gulp" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="true" content_ui="tabs" />
       <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.18160743" sideWeight="0.49408284" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="10" side_tool="true" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32924962" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="npm" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32924962" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.20479134" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.237366" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.237366" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.16045627" sideWeight="0.50591713" order="3" side_tool="true" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.39940828" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
@@ -636,20 +550,6 @@
     </PATH>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/mui/examples/login/libs/easymob-webim-sdk/strophe-custom-2.0.0.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1789">
-          <caret line="533" column="4" lean-forward="false" selection-start-line="533" selection-start-column="4" selection-end-line="533" selection-end-column="4" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/mui/js/mui.jsonp.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-4">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/mui/js/mui.offcanvas.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
@@ -880,41 +780,14 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="68">
           <caret line="4" column="4" lean-forward="false" selection-start-line="4" selection-start-column="4" selection-end-line="4" selection-end-column="4" />
-          <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/js/iscroll-bd.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="170">
-          <caret line="10" column="16" lean-forward="false" selection-start-line="10" selection-start-column="11" selection-end-line="10" selection-end-column="16" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/src/js/iscroll-bd.html" />
     <entry file="file://$PROJECT_DIR$/node_modules/iscroll/build/iscroll-probe.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="199">
           <caret line="1914" column="15" lean-forward="false" selection-start-line="1914" selection-start-column="12" selection-end-line="1914" selection-end-column="15" />
-          <folding>
-            <element signature="n#!!doc" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/js/iscroll-lite.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="17">
-          <caret line="1" column="43" lean-forward="false" selection-start-line="1" selection-start-column="43" selection-end-line="1" selection-end-column="43" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/css/base.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="17">
-          <caret line="4" column="0" lean-forward="false" selection-start-line="4" selection-start-column="0" selection-end-line="4" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -934,24 +807,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/css/common.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-727">
-          <caret line="27" column="131" lean-forward="true" selection-start-line="27" selection-start-column="131" selection-end-line="27" selection-end-column="131" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/js/iscroll-bd.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="51">
-          <caret line="3" column="34" lean-forward="false" selection-start-line="3" selection-start-column="34" selection-end-line="3" selection-end-column="34" />
-          <folding>
-            <marker date="1494915546000" expanded="true" signature="11387:11441" ph="..." />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/demo/iscrollAndLoopImg.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-85">
@@ -960,18 +815,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/js/iscroll-probe.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="41633">
-          <caret line="2425" column="4" lean-forward="false" selection-start-line="2425" selection-start-column="4" selection-end-line="2425" selection-end-column="4" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/demo/picker.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="72">
-          <caret line="20" column="7" lean-forward="true" selection-start-line="20" selection-start-column="7" selection-end-line="20" selection-end-column="7" />
+        <state relative-caret-position="340">
+          <caret line="20" column="7" lean-forward="false" selection-start-line="20" selection-start-column="7" selection-end-line="20" selection-end-column="7" />
           <folding />
         </state>
       </provider>
@@ -984,21 +831,79 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/css/common.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="17">
+          <caret line="27" column="131" lean-forward="false" selection-start-line="27" selection-start-column="131" selection-end-line="27" selection-end-column="131" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$APPLICATION_HOME_DIR$/plugins/JavaScriptLanguage/lib/JavaScriptLanguage.jar!/com/intellij/lang/javascript/index/predefined/DHTML.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="208">
+          <caret line="1280" column="0" lean-forward="false" selection-start-line="1280" selection-start-column="0" selection-end-line="1280" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/js/iscroll-probe.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="301">
+          <caret line="795" column="13" lean-forward="true" selection-start-line="793" selection-start-column="12" selection-end-line="795" selection-end-column="13" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/js/iscroll-utils.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="102">
-          <caret line="8" column="25" lean-forward="true" selection-start-line="8" selection-start-column="25" selection-end-line="8" selection-end-column="25" />
+        <state relative-caret-position="121">
+          <caret line="211" column="24" lean-forward="true" selection-start-line="211" selection-start-column="24" selection-end-line="211" selection-end-column="24" />
           <folding>
             <element signature="e#0#38#0" expanded="false" />
           </folding>
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/dist/js/iscroll-bd.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="3473" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="9407" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/js/iscroll-lite.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="963">
+          <caret line="181" column="46" lean-forward="true" selection-start-line="181" selection-start-column="46" selection-end-line="181" selection-end-column="46" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/css/base.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="285">
+          <caret line="1510" column="37" lean-forward="false" selection-start-line="1510" selection-start-column="29" selection-end-line="1510" selection-end-column="37" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/demo/BdScroll.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="395">
-          <caret line="71" column="36" lean-forward="false" selection-start-line="71" selection-start-column="36" selection-end-line="71" selection-end-column="36" />
+        <state relative-caret-position="272">
+          <caret line="15" column="31" lean-forward="false" selection-start-line="15" selection-start-column="31" selection-end-line="15" selection-end-column="31" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/js/iscroll-bd.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="140">
+          <caret line="296" column="26" lean-forward="true" selection-start-line="296" selection-start-column="26" selection-end-line="296" selection-end-column="26" />
+          <folding>
+            <marker date="1495099207000" expanded="true" signature="6104:6158" ph="..." />
+          </folding>
         </state>
       </provider>
     </entry>

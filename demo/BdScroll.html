@@ -12,12 +12,15 @@
     <script src="../src/js/flex.js"></script>
     <link rel="stylesheet" href="../src/css/base.css"/>
     <style>
-        body { margin-top: -40px; }
-        header { height: 1.28rem; background: #dd524d; overflow: hidden; position: fixed; top: 0; z-index: 100 }
-        li { height: 1.5rem; background: #007AFF }
+        header { height: 1.28rem; width:100%; background: #dd524d; overflow: hidden; position: fixed; top: 0; z-index: 100 }
+        footer { height: .98rem; width:100%; background: #dd524d; overflow: hidden; position: fixed; bottom: 0; z-index: 100 }
+        li { height: 100px; background: #007AFF }
         li:nth-child(2n) { background: #d8d8d8 }
 
-        #wrapper { position: relative; margin-top: 1.28rem; width: 100%; z-index: 10; max-width: 750px; }
+
+        body { margin-top: -40px; padding-bottom: 0.98rem }
+
+        #wrapper { margin-top: 1.28rem; position: relative; width: 100%; z-index: 10; max-width: 750px; }
         .pullUp_box, .pullDown_box { height: 40px; line-height: 40px; text-align: center; margin: 0 auto; width: auto; position: relative }
         .pullDownIcon, .pullUpIcon { height: 20px; width: 20px; position: absolute; top: 10px; margin-left: -25px; }
         #pullUp, #pullDown { height: 40px; line-height: 40px; font-size: .24rem; color: #999; }
@@ -30,10 +33,10 @@
 </head>
 <body>
 <header>
-    <p>内存泄漏是指计算机可用内存的逐渐减少。当程序持续无法释放其使用的临时内存时就会发生。JavaScript的web应用也会经常遇到在原生应用程序中出现的内存相关的问题，如泄漏和溢出，web应用也需要应对垃圾回收停顿。</p>
+    <p></p>
 </header>
 <div id="wrapper">
-    <div class="bd-scroller">
+    <div class="scroller">
         <div id="pullDown">
             <div class="pullUp_box">
                 <span class="pullDownIcon"></span><span class="pullDownLabel">下拉刷新...</span>
@@ -66,6 +69,7 @@
         </div>
     </div>
 </div>
+<footer></footer>
 </body>
 <script src="../src/js/common.js"></script>
 <script src="../src/js/iscroll-utils.js"></script>
@@ -77,27 +81,21 @@
 
 
 	var a = new BdScroll('#wrapper', {
-		scrollY: true,
-		scrollX: false
-	});
-
-	a.on('pullDownRefresh', function () {
-		setTimeout(function () {
-			a.refresh();
-		}, 5000);
-	})
-
-	var delta = window.innerHeight;
-	window.addEventListener('scroll', function () {
-		if (document.body.scrollTop > a.maxScrollTop - delta && !a.uprefreshing && !a.downrefreshing) {
-			a.changePullTip('u3');
-			a.uprefreshing = true;
-			a.draw(2, 100);
+		pullDownFn: function () {
+			setTimeout(function () {
+				a.refresh();
+			}, 3000);
+		},
+		pullUpFn: function () {
 			setTimeout(function () {
 				a.refresh(true);
-			}, 5000);
+			}, 3000);
+		},
+		onScroll: function (e) {
+
 		}
-	}, false);
+	});
+
 
 </script>
 </html>
