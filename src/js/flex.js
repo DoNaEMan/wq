@@ -14,7 +14,7 @@
 
 	docEl.style.maxWidth = designDraftWidth + 'px';
 	function getInfo(){
-		sw = win.innerWidth;
+		sw = win.innerWidth > designDraftWidth ? designDraftWidth : win.innerWidth;
 		docEl.style.fontSize = designDefautRatio * sw / designDraftWidth + 'px';
     }
 
