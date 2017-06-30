@@ -464,7 +464,7 @@
             el.style.display = 'none';
             if (type === 'alert' || type === 'confirm') {
                 c = document.querySelector('.content,.container');
-                c && c.classList.add('filter');
+                c && c.classList.remove('filter');
             }
             return this;
         },
