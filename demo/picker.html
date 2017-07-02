@@ -149,7 +149,7 @@
 			pickers.result = opts.dftsValue || {
 					y: d.getFullYear(),
 					month: d.getMonth() + 1,
-					d: d.getDay(),
+					d: d.getDate(),
 					h: d.getHours(),
 					m: d.getMinutes(),
 					s: d.getSeconds()
@@ -300,6 +300,15 @@
 				}
 			}
 
+			//销毁
+			pickers.destroy = function () {
+				for (var i in this) {
+					if (typeof this[i] === 'object' && this[i].destroy) {
+						this[i].destroy();
+					}
+				}
+			}
+
 			//滚动停止后设置选择中值
 			function setValue() {
 				//确认滚动到位了
@@ -386,7 +395,7 @@
 					this.$nextTick(function(){
 						pick = picker({
 							//每个子picker的唯一键名 ['y','month','d','h','m','s'],['0', '1', '2']
-							cols: ['y','m','s'],
+							cols: ['y','month','d','h','m','s'],
 							//类型 `time` `data`
 							type: 'time',
 							//联动 数据

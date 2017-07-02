@@ -181,7 +181,7 @@
 		},
 
 		_scroll: function (e) {
-			if (!this.uprefreshing && !this.downrefreshing && this.moved && document.body.scrollTop > document.body.offsetHeight - this.windowHeight - 40) {
+			if (!this.uprefreshing && !this.downrefreshing && this.moved && document.body.scrollTop >= document.body.offsetHeight - this.windowHeight - 80) {
 				this.draw(2, 100);
 				this.changePullTip('u3');
 				this.uprefreshing = true;
